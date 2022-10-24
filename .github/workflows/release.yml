@@ -35,6 +35,7 @@ jobs:
         uses: msys2/setup-msys2@v2
         with:
           msystem: mingw64
+          path-type: inherit
           install: >-
             mingw-w64-x86_64-cc
             mingw-w64-x86_64-cmake
