@@ -10,6 +10,14 @@ const commonHeaders = {
 }
 
 let response
+
+const assertStatus = (status) => {
+	if (response.status !== status) {
+		console.log('bad status code', response.status)
+		process.exit(1)
+	}
+}
+
 getRelease: {
 	console.log("get release", version)
 
@@ -37,16 +45,12 @@ getRelease: {
 			}),
 		},
 	)
-
-	if (response.status !== 201) {
-		console.log(`bad status code: ${response.status}`)
-		process.exit(1)
-	}
+	assertStatus(201)
 }
 const releaseId = (await response.json()).id
 
 process.chdir(sdlDir)
-console.log("creating archive", assetName)
+console.log("create archive", assetName)
 
 const assetFile = Path.join(sdlDir, assetName)
 await Tar.c(
@@ -55,7 +59,27 @@ await Tar.c(
 )
 const buffer = Fs.readFileSync(assetFile)
 
-console.log("uploading", assetName)
+response = await fetch(
+	`https://api.github.com/repos/${owner}/${repo}/releases/${releaseId}/assets`,
+	{ headers: commonHeaders },
+)
+assertStatus(200)
+
+const list = await response.json()
+const asset = list.find((x) => x.name === assetName)
+if (asset) {
+	console.log("delete asset", assetName)
+	response = await fetch(
+		`https://api.github.com/repos/${owner}/${repo}/releases/assets/${asset.id}`,
+		{
+			headers: commonHeaders,
+			method: 'DELETE',
+		},
+	)
+	assertStatus(204)
+}
+
+console.log("upload", assetName)
 response = await fetch(
 	`https://uploads.github.com/repos/${owner}/${repo}/releases/${releaseId}/assets?name=${assetName}`,
 	{
@@ -68,9 +92,4 @@ response = await fetch(
 		body: buffer,
 	},
 )
-
-if (response.status !== 201) {
-	console.log(`bad status code: ${response.status}`)
-	console.log(await response.json())
-	process.exit(1)
-}
+assertStatus(201)

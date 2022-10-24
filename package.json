@@ -9,15 +9,16 @@
   "main": "src/index.js",
   "scripts": {
     "install": "cd scripts; node install.mjs",
+    "install-from-source": "cd scripts; node install-from-source.mjs",
     "download-prebuilt": "cd scripts; node download-prebuilt.mjs",
     "download-src": "cd scripts; node download-src.mjs",
-    "install-deps-ubuntu": "./scripts/install-deps-ubuntu.sh",
-    "install-deps-mac": "./scripts/install-deps-mac.sh",
     "configure": "cd scripts; node configure.mjs",
     "rebuild": "cd scripts; node rebuild.mjs",
     "upload-prebuilt": "cd scripts; node upload-prebuilt.mjs",
     "publish": "cd scripts; node publish.mjs",
-    "clean": "cd scripts; node clean.mjs"
+    "clean": "cd scripts; node clean.mjs",
+    "install-deps-ubuntu": "./scripts/install-deps-ubuntu.sh",
+    "install-deps-mac": "./scripts/install-deps-mac.sh"
   },
   "license": "MIT",
   "dependencies": {

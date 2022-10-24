@@ -42,4 +42,4 @@ jobs:
             mingw-w64-x86_64-ninja
             mingw-w64-x86_64-pkg-config
 
-      - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run upload-prebuilt
+      - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run publish

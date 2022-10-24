@@ -6,7 +6,7 @@ if (!process.env.FROM_SOURCE) {
 		process.exit()
 	} catch (error) {}
 } else {
-	console.log("building from source")
+	console.log("build from source")
 }
 
 execSync('npm run install-from-source', { stdio: 'inherit' })
