@@ -1,5 +1,4 @@
-import { execSync } from 'node:child_process'
 
-execSync('npm run download-src', { stdio: 'inherit' })
-execSync('npm run configure', { stdio: 'inherit' })
-execSync('npm run rebuild', { stdio: 'inherit' })
+await $`npm run download-src`
+await $`npm run configure`
+await $`npm run rebuild`

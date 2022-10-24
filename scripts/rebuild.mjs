@@ -1,11 +1,10 @@
-import { execSync } from 'node:child_process'
-import { sdlBuildDir, sdlOutDir } from '../src/index.js'
+import { sdlBuildDir, sdlOutDir } from '../src/common.js'
 
-process.chdir(sdlBuildDir)
-execSync('make -j$(nproc)', { stdio: 'inherit' })
-execSync('make install', { stdio: 'inherit' })
+cd(sdlBuildDir)
+await $`make -j$(nproc)`
+await $`make install`
 
-process.chdir(sdlOutDir)
-execSync(`find . -type f ! -name '*.h' -and ! -name '*.so*' -exec rm -f {} +`, { stdio: 'inherit' })
-execSync('mv include/SDL2/* include', { stdio: 'inherit' })
-execSync(`find . -depth -type d -empty -delete`, { stdio: 'inherit' })
+cd(sdlOutDir)
+await $`find . -type f ! -name '*.h' -and ! -name '*.so*' -exec rm -f {} +`
+await $`mv include/SDL2/* include`
+await $`find . -depth -type d -empty -delete`

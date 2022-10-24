@@ -1,8 +1,4 @@
-import Fs from 'fs'
-import Path from 'path'
-import { fetch } from 'undici'
-import Tar from 'tar'
-import { owner, repo, version, sdlDir, sdlOutDir, assetName } from '../src/index.js'
+import { owner, repo, version, sdlDir, sdlOutDir, assetName } from '../src/common.js'
 
 const commonHeaders = {
 	Accept: 'application/vnd.github+json',
@@ -11,28 +7,23 @@ const commonHeaders = {
 
 let response
 
-const assertStatus = (status) => {
-	if (response.status !== status) {
-		console.log("bad status code", response.status)
-		process.exit(1)
-	}
-}
+$.verbose = false
 
 getRelease: {
-	console.log("get release", version)
+	echo("get release", version)
 
 	response = await fetch(
 		`https://api.github.com/repos/${owner}/${repo}/releases/tags/v${version}`,
 		{ headers: commonHeaders },
 	)
 
-	if (response.status === 200) {
-		console.log("release exists", version)
+	if (response.ok) {
+		echo("release exists", version)
 		break getRelease
 	}
 
-	console.log("bad status code", response.status)
-	console.log("create release", version)
+	echo("bad status code", response.status)
+	echo("create release", version)
 
 	response = await fetch(
 		`https://api.github.com/repos/${owner}/${repo}/releases`,
@@ -45,30 +36,27 @@ getRelease: {
 			}),
 		},
 	)
-	assertStatus(201)
+	if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 }
 const releaseId = (await response.json()).id
 
-process.chdir(sdlDir)
-console.log("create archive", assetName)
+cd(sdlDir)
+echo("create archive", assetName)
 
-const assetFile = Path.join(sdlDir, assetName)
-await Tar.c(
-	{ gzip: true, file: assetFile },
-	[ Path.relative(sdlDir, sdlOutDir) ],
-)
-const buffer = Fs.readFileSync(assetFile)
+const assetFile = path.join(sdlDir, assetName)
+await $`tar czf ${assetFile} ${path.relative(sdlDir, sdlOutDir)}`
+const buffer = await fs.readFile(assetFile)
 
 response = await fetch(
 	`https://api.github.com/repos/${owner}/${repo}/releases/${releaseId}/assets`,
 	{ headers: commonHeaders },
 )
-assertStatus(200)
+if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 
 const list = await response.json()
 const asset = list.find((x) => x.name === assetName)
 if (asset) {
-	console.log("delete asset", assetName)
+	echo("delete asset", assetName)
 	response = await fetch(
 		`https://api.github.com/repos/${owner}/${repo}/releases/assets/${asset.id}`,
 		{
@@ -76,10 +64,10 @@ if (asset) {
 			method: 'DELETE',
 		},
 	)
-	assertStatus(204)
+	if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 }
 
-console.log("upload", assetName)
+echo("upload", assetName)
 response = await fetch(
 	`https://uploads.github.com/repos/${owner}/${repo}/releases/${releaseId}/assets?name=${assetName}`,
 	{
@@ -92,4 +80,4 @@ response = await fetch(
 		body: buffer,
 	},
 )
-assertStatus(201)
+if (!response.ok) { throw new Error(`bad status code ${response.status}`) }

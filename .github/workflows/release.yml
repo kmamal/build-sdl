@@ -20,16 +20,16 @@ jobs:
         shell: ${{ matrix.platform.shell }}
 
     steps:
-      # - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      # - if: ${{ startsWith(matrix.platform.os, 'ubuntu-') }}
-      #   run: npm run install-deps-ubuntu
+      - if: ${{ startsWith(matrix.platform.os, 'ubuntu-') }}
+        run: npm run install-deps-ubuntu
 
-      # - if: ${{ startsWith(matrix.platform.os, 'macos-') }}
-      #   run: npm run install-deps-mac
+      - if: ${{ startsWith(matrix.platform.os, 'macos-') }}
+        run: npm run install-deps-mac
 
-      # # - if: ${{ matrix.platform.m1 }}
-      # #   run: "# TODO cross-compile"
+      # - if: ${{ matrix.platform.m1 }}
+      #   run: "# TODO cross-compile"
 
       - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
         uses: msys2/setup-msys2@v2
@@ -45,7 +45,4 @@ jobs:
           echo 'PATH="${PATH}:/c/Program Files/nodejs/"' >> /etc/profile
           echo 'export PATH' >> /etc/profile
 
-      # - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run publish
-      - run: |
-          echo $COMSPEC
-          echo $SHELL
+      - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run publish

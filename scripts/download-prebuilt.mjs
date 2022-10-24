@@ -1,17 +1,13 @@
-import Fs from 'node:fs'
-import { request } from 'undici'
-import Tar from 'tar'
-import { owner, repo, version, sdlOutDir, assetName } from '../src/index.js'
+import { owner, repo, version, sdlOutDir, assetName } from '../src/common.js'
 
 const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/${assetName}`
 
-console.log("fetch", url)
-const response = await request(url, { maxRedirections: 5 })
-if (response.statusCode !== 200) {
-	console.error("bad status code", response.statusCode)
-	process.exit(1)
-}
+echo("fetch", url)
+const response = await fetch(url)
+if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 
-console.log("unpack to", sdlOutDir)
-Fs.mkdirSync(sdlOutDir, { recursive: true })
-response.body.pipe(Tar.x({ strip: 1, C: sdlOutDir }))
+echo("unpack to", sdlOutDir)
+await fs.mkdirp(sdlOutDir)
+const tar = $`tar xz -C ${sdlOutDir} --strip=1`
+response.body.pipe(tar.stdin)
+await tar

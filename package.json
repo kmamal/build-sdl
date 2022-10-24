@@ -6,23 +6,21 @@
     "type": "git",
     "url": "git@github.com:kmamal/build-sdl.git"
   },
-  "main": "src/index.js",
   "scripts": {
-    "install": "cd scripts && node install.mjs",
-    "download-prebuilt": "cd scripts && node download-prebuilt.mjs",
-    "install-from-source": "cd scripts && node install-from-source.mjs",
-    "download-src": "cd scripts && node download-src.mjs",
-    "configure": "cd scripts && node configure.mjs",
-    "rebuild": "cd scripts && node rebuild.mjs",
-    "upload-prebuilt": "cd scripts && node upload-prebuilt.mjs",
-    "publish": "cd scripts && node publish.mjs",
-    "clean": "cd scripts && node clean.mjs",
+    "install": "cd scripts && zx install.mjs",
+    "download-prebuilt": "cd scripts && zx download-prebuilt.mjs",
+    "install-from-source": "cd scripts && zx install-from-source.mjs",
+    "download-src": "cd scripts && zx download-src.mjs",
+    "configure": "cd scripts && zx configure.mjs",
+    "rebuild": "cd scripts && zx rebuild.mjs",
+    "upload-prebuilt": "cd scripts && zx upload-prebuilt.mjs",
+    "publish": "cd scripts && zx publish.mjs",
+    "clean": "cd scripts && zx clean.mjs",
     "install-deps-ubuntu": "./scripts/install-deps-ubuntu.sh",
     "install-deps-mac": "./scripts/install-deps-mac.sh"
   },
   "license": "MIT",
   "dependencies": {
-    "tar": "^6.1.11",
-    "undici": "^5.11.0"
+    "zx": "^7.1.1"
   }
 }

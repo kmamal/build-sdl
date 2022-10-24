@@ -1,17 +1,13 @@
-import Fs from 'fs'
-import { request } from 'undici'
-import Tar from 'tar'
-import { version, sdlDir } from '../src/index.js'
+import { version, sdlDir } from '../src/common.js'
 
 const url = `https://github.com/libsdl-org/SDL/archive/refs/tags/release-${version}.tar.gz`
 
-console.log("fetch", url)
-const response = await request(url, { maxRedirections: 5 })
-if (response.statusCode !== 200) {
-	console.error("bad status code", response.statusCode)
-	process.exit(1)
-}
+echo("fetch", url)
+const response = await fetch(url)
+if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 
-console.log("unpack to", sdlDir)
-Fs.mkdirSync(sdlDir, { recursive: true })
-response.body.pipe(Tar.x({ strip: 1, C: sdlDir }))
+echo("unpack to", sdlDir)
+await fs.mkdirp(sdlDir)
+const tar = $`tar xz -C ${sdlDir} --strip=1`
+response.body.pipe(tar.stdin)
+await tar

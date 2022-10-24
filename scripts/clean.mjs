@@ -1,4 +1,6 @@
-import { execSync } from 'node:child_process'
-import { rootDir, sdlDir } from '../src/index.js'
+import { rootDir, sdlDir } from '../src/common.js'
 
-execSync(`rm -rf node_modules ${sdlDir}`, { cwd: rootDir, stdio: 'inherit' })
+await Promise.all([
+	fs.remove(path.join(rootDir, 'node_modules')),
+	fs.remove(sdlDir),
+])
