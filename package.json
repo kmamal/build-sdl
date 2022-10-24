@@ -1,5 +1,5 @@
 {
-  "version": "0.0.0",
+  "version": "2.24.1",
   "name": "@kmamal/build-sdl",
   "description": "build-sdl",
   "repository": {
@@ -8,14 +8,16 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "test": "./scripts/run-tests.sh",
-    "update-exports": "./scripts/update-exports.sh"
+    "build": "cd scripts; node build.mjs",
+    "fetch-prebuilt": "cd scripts; node fetch-prebuilt.mjs",
+    "fetch-src": "cd scripts; node fetch-src.mjs",
+    "configure": "cd scripts; node configure.mjs",
+    "rebuild": "cd scripts; node rebuild.mjs",
+    "publish": "cd scripts; node publish.mjs"
   },
   "license": "MIT",
   "dependencies": {
-    "@kmamal/util": "^0.1.6"
-  },
-  "devDependencies": {
-    "@kmamal/testing": "^0.0.20"
+    "tar": "^6.1.11",
+    "undici": "^5.11.0"
   }
 }
