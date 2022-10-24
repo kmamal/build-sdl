@@ -29,8 +29,8 @@ jobs:
       - if: ${{ startsWith(matrix.platform.os, 'macos-') }}
         run: npm run install-deps-mac
 
-      - if: ${{ matrix.platform.m1 }}
-        run: "# TODO cross-compile"
+      # - if: ${{ matrix.platform.m1 }}
+      #   run: "# TODO cross-compile"
 
       - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
         uses: msys2/setup-msys2@v2
