@@ -13,10 +13,10 @@ jobs:
     strategy:
       matrix:
         platform:
-          - { name: 'Linux', os: ubuntu-latest }
-          - { name: 'Mac', os: macos-latest }
-          - { name: 'Mac (M1)', os: macos-latest, m1: true }
-          - { name: 'Windows', os: windows-latest }
+          - { name: 'Linux'    ,os: ubuntu-22.04           }
+          - { name: 'Mac'      ,os: macos-12               }
+          - { name: 'Mac (M1)' ,os: macos-12     ,m1: true }
+          - { name: 'Windows'  ,os: windows-2022           }
 
     runs-on: ${{ matrix.platform.os }}
 
