@@ -1,0 +1,21 @@
+{
+  "version": "0.0.0",
+  "name": "@kmamal/build-sdl",
+  "description": "build-sdl",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kmamal/build-sdl.git"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "test": "./scripts/run-tests.sh",
+    "update-exports": "./scripts/update-exports.sh"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@kmamal/util": "^0.1.6"
+  },
+  "devDependencies": {
+    "@kmamal/testing": "^0.0.20"
+  }
+}
