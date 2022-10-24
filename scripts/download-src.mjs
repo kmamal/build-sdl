@@ -2,7 +2,7 @@ import Fs from 'fs'
 import { fetch } from 'undici'
 import Tar from 'tar'
 import { Readable } from 'node:stream'
-import { version, sdlDir } from './util.mjs'
+import { version, sdlDir } from '../src/index.js'
 
 const url = `https://github.com/libsdl-org/SDL/archive/refs/tags/release-${version}.tar.gz`
 

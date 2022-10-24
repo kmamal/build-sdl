@@ -2,9 +2,9 @@ import Fs from 'node:fs'
 import { Readable } from 'node:stream'
 import { fetch } from 'undici'
 import Tar from 'tar'
-import { platform, arch, version, sdlOutDir } from './util.mjs'
+import { owner, repo, version, sdlOutDir, assetName } from '../src/index.js'
 
-const url = `https://github.com/kmamal/build-sdl/releases/download/v${version}/SDL2-${version}-${platform}-${arch}.tar.gz`
+const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/${assetName}`
 
 console.log("fetch", url)
 const response = await fetch(url, { follow: true })

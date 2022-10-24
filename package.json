@@ -1,5 +1,5 @@
 {
-  "version": "2.24.1",
+  "version": "2.24.1-0",
   "name": "@kmamal/build-sdl",
   "description": "build-sdl",
   "repository": {
@@ -8,12 +8,16 @@
   },
   "main": "src/index.js",
   "scripts": {
-    "build": "cd scripts; node build.mjs",
-    "fetch-prebuilt": "cd scripts; node fetch-prebuilt.mjs",
-    "fetch-src": "cd scripts; node fetch-src.mjs",
+    "install": "cd scripts; node install.mjs",
+    "download-prebuilt": "cd scripts; node download-prebuilt.mjs",
+    "download-src": "cd scripts; node download-src.mjs",
+    "install-deps-ubuntu": "./scripts/install-deps-ubuntu.sh",
+    "install-deps-mac": "./scripts/install-deps-mac.sh",
     "configure": "cd scripts; node configure.mjs",
     "rebuild": "cd scripts; node rebuild.mjs",
-    "publish": "cd scripts; node publish.mjs"
+    "upload-prebuilt": "cd scripts; node upload-prebuilt.mjs",
+    "publish": "cd scripts; node publish.mjs",
+    "clean": "cd scripts; node clean.mjs"
   },
   "license": "MIT",
   "dependencies": {
