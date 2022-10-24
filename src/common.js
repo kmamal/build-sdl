@@ -3,9 +3,9 @@ const Path = require('path')
 const Os = require('os')
 
 const rootDir = Path.dirname(__dirname)
-const sdlDir = Path.join(rootDir, 'SDL')
-const sdlBuildDir = Path.join(sdlDir, 'build')
-const sdlOutDir = Path.join(sdlDir, 'out')
+const sdlDir = Path.resolve(rootDir, 'SDL')
+const sdlBuildDir = Path.resolve(sdlDir, 'build')
+const sdlOutDir = Path.resolve(sdlDir, 'out')
 
 const pkgFilePath = Path.resolve(rootDir, 'package.json')
 const pkg = JSON.parse(Fs.readFileSync(pkgFilePath, 'utf8'))

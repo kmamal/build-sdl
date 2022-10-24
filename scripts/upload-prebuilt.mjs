@@ -43,7 +43,7 @@ const releaseId = (await response.json()).id
 cd(sdlDir)
 echo("create archive", assetName)
 
-const assetFile = path.join(sdlDir, assetName)
+const assetFile = path.resolve(sdlDir, assetName)
 await $`tar czf ${assetFile} ${path.relative(sdlDir, sdlOutDir)}`
 const buffer = await fs.readFile(assetFile)
 
