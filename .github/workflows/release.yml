@@ -20,29 +20,32 @@ jobs:
         shell: ${{ matrix.platform.shell }}
 
     steps:
-      - uses: actions/checkout@v3
+      # - uses: actions/checkout@v3
 
-      - if: ${{ startsWith(matrix.platform.os, 'ubuntu-') }}
-        run: npm run install-deps-ubuntu
+      # - if: ${{ startsWith(matrix.platform.os, 'ubuntu-') }}
+      #   run: npm run install-deps-ubuntu
 
-      - if: ${{ startsWith(matrix.platform.os, 'macos-') }}
-        run: npm run install-deps-mac
+      # - if: ${{ startsWith(matrix.platform.os, 'macos-') }}
+      #   run: npm run install-deps-mac
 
-      # - if: ${{ matrix.platform.m1 }}
-      #   run: "# TODO cross-compile"
+      # # - if: ${{ matrix.platform.m1 }}
+      # #   run: "# TODO cross-compile"
 
-      - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
-        uses: msys2/setup-msys2@v2
-        with:
-          msystem: mingw64
-          path-type: inherit
-          install: >-
-            mingw-w64-x86_64-cc
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-ninja
-            mingw-w64-x86_64-pkg-config
+      # - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
+      #   uses: msys2/setup-msys2@v2
+      #   with:
+      #     msystem: mingw64
+      #     path-type: inherit
+      #     install: >-
+      #       mingw-w64-x86_64-cc
+      #       mingw-w64-x86_64-cmake
+      #       mingw-w64-x86_64-ninja
+      #       mingw-w64-x86_64-pkg-config
+      # - run: |
+      #     echo 'PATH="${PATH}:/c/Program Files/nodejs/"' >> /etc/profile
+      #     echo 'export PATH' >> /etc/profile
+
+      # - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run publish
       - run: |
-          echo 'PATH="${PATH}:/c/Program Files/nodejs/"' >> /etc/profile
-          echo 'export PATH' >> /etc/profile
-
-      - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run publish
+          echo $COMSPEC
+          echo $SHELL
