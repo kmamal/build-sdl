@@ -31,19 +31,19 @@ jobs:
       # # - if: ${{ matrix.platform.m1 }}
       # #   run: "# TODO cross-compile"
 
-      # - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
-      #   uses: msys2/setup-msys2@v2
-      #   with:
-      #     msystem: mingw64
-      #     path-type: inherit
-      #     install: >-
-      #       mingw-w64-x86_64-cc
-      #       mingw-w64-x86_64-cmake
-      #       mingw-w64-x86_64-ninja
-      #       mingw-w64-x86_64-pkg-config
-      # - run: |
-      #     echo 'PATH="${PATH}:/c/Program Files/nodejs/"' >> /etc/profile
-      #     echo 'export PATH' >> /etc/profile
+      - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: mingw64
+          path-type: inherit
+          install: >-
+            mingw-w64-x86_64-cc
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-pkg-config
+      - run: |
+          echo 'PATH="${PATH}:/c/Program Files/nodejs/"' >> /etc/profile
+          echo 'export PATH' >> /etc/profile
 
       # - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run publish
       - run: |
