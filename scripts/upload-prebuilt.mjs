@@ -13,7 +13,7 @@ let response
 
 const assertStatus = (status) => {
 	if (response.status !== status) {
-		console.log('bad status code', response.status)
+		console.log("bad status code", response.status)
 		process.exit(1)
 	}
 }
@@ -31,7 +31,7 @@ getRelease: {
 		break getRelease
 	}
 
-	console.log(`bad status code: ${response.status}`)
+	console.log("bad status code", response.status)
 	console.log("create release", version)
 
 	response = await fetch(
