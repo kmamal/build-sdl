@@ -20,5 +20,10 @@ export const [ , owner, repo ] = pkg.repository.url.match(/git@github.com:([^/]+
 export const { platform } = process
 export const arch = os.arch()
 export const assetName = `SDL2-v${version}-${platform}-${arch}.tar.gz`
+export const sharedLibExt = {
+	linux: '.so',
+	darwin: '.dylib',
+	win32: '.dll',
+}[platform]
 
 $.verbose = true
