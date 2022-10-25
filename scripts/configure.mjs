@@ -8,11 +8,11 @@ await Promise.all([
 cd(sysSdlBuildDir)
 await $`make distclean || true`
 
-let crossCompileFlags = ''
+let crossCompileFlag = ''
 if (platform === 'darwin') {
 	process.env.CC = 'clang'
 	if (process.env.M1) {
-		crossCompileFlags = '--host=arm-apple-darwin --build=aarch64-apple-darwin'
+		crossCompileFlag = '--host=arm-apple-darwin'
 		process.env.CFLAGS = `${process.env.CFLAGS ?? ''} -mmacosx-version-min=11.0 -I/usr/local/include`.trim()
 		process.env.CLANG_LINK_ARM64 = `${process.env.LDFLAGS ?? ''} -mmacosx-version-min=11.0`.trim()
 	} else {
@@ -20,4 +20,4 @@ if (platform === 'darwin') {
 		process.env.LDFLAGS = `${process.env.LDFLAGS ?? ''} -mmacosx-version-min=10.9`.trim()
 	}
 }
-await $`../configure ${crossCompileFlags} --prefix=${posixSdlOutDir}`
+await $`../configure ${crossCompileFlag} --prefix=${posixSdlOutDir}`
