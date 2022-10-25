@@ -1,10 +1,10 @@
-import { sdlBuildDir, sdlOutDir } from './common.mjs'
+import { posixSdlBuildDir, posixSdlOutDir, sysSdlBuildDir } from './common.mjs'
 
 await Promise.all([
-	$`mkdir -p ${sdlBuildDir}`,
-	$`mkdir -p ${sdlOutDir}`,
+	$`mkdir -p ${posixSdlBuildDir}`,
+	$`mkdir -p ${posixSdlOutDir}`,
 ])
 
-cd(sdlBuildDir)
+cd(sysSdlBuildDir)
 await $`make distclean || true`
-await $`../configure --prefix=${sdlOutDir}`
+await $`../configure --prefix=${posixSdlOutDir}`

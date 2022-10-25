@@ -1,10 +1,10 @@
-import { sdlBuildDir, sdlOutDir } from './common.mjs'
+import { sysSdlBuildDir, sysSdlOutDir } from './common.mjs'
 
-cd(sdlBuildDir)
+cd(sysSdlBuildDir)
 await $`make -j$(nproc)`
 await $`make install`
 
-cd(sdlOutDir)
+cd(sysSdlOutDir)
 await $`find . -type f ! -name '*.h' -and ! -name '*.so*' -exec rm -f {} +`
 await $`mv include/SDL2/* include`
 await $`find . -depth -type d -empty -delete`
