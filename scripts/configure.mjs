@@ -9,6 +9,7 @@ cd(sysSdlBuildDir)
 await $`make distclean || true`
 
 if (platform === 'darwin') {
+	process.env.CC = 'clang'
 	if (process.env.M1) {
 		process.env.CFLAGS = `${process.env.CFLAGS ?? ''} -arch arm64 -mmacosx-version-min=11.0 -I/usr/local/include`.trim()
 		process.env.CLANG_LINK_ARM64 = `${process.env.LDFLAGS ?? ''} -mmacosx-version-min=11.0`.trim()
