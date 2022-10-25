@@ -43,12 +43,11 @@ getRelease: {
 }
 const releaseId = (await response.json()).id
 
-cd(sdlDir)
 echo("create archive", assetName)
 
-const assetFile = path.posix.resolve(sdlDir, assetName)
-await $`tar czf ${assetFile} ${path.posix.relative(sdlDir, sdlOutDir)}`
-const buffer = await fs.readFile(assetFile)
+cd(sdlDir)
+await $`tar czf ${assetName} ${path.posix.relative(sdlDir, sdlOutDir)}`
+const buffer = await fs.readFile(assetName)
 
 $.verbose = false
 response = await fetch(
