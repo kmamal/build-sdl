@@ -2,14 +2,14 @@
 $.verbose = false
 
 export const sysRootDir = path.dirname(__dirname)
-export const sysSdlDir = path.posix.resolve(sysRootDir, 'SDL')
+export const sysSdlDir = path.posix.join(sysRootDir, 'SDL')
 export const sysSdlBuildDir = path.posix.join(sysSdlDir, 'build')
 export const sysSdlOutDir = path.posix.join(sysSdlDir, 'out')
 
 cd(sysRootDir)
 
 export const posixRootDir = (await $`pwd`).stdout.trim()
-export const posixSdlDir = path.posix.resolve(posixRootDir, 'SDL')
+export const posixSdlDir = path.posix.join(posixRootDir, 'SDL')
 export const posixSdlBuildDir = path.posix.join(posixSdlDir, 'build')
 export const posixSdlOutDir = path.posix.join(posixSdlDir, 'out')
 
