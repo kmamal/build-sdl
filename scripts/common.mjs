@@ -19,7 +19,8 @@ export const [ , owner, repo ] = pkg.repository.url.match(/git@github.com:([^/]+
 
 export const { platform } = process
 export const arch = os.arch()
-export const assetName = `SDL2-v${version}-${platform}-${arch}.tar.gz`
+export const targetArch = platform === 'darwin' && process.env.M1 ? 'arm64' : arch
+export const assetName = `SDL2-v${version}-${platform}-${targetArch}.tar.gz`
 export const sharedLibExt = {
 	linux: '.so',
 	darwin: '.dylib',

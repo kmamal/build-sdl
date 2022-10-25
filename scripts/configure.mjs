@@ -1,4 +1,4 @@
-import { platform, arch, posixSdlBuildDir, posixSdlOutDir, sysSdlBuildDir } from './common.mjs'
+import { platform, posixSdlBuildDir, posixSdlOutDir, sysSdlBuildDir } from './common.mjs'
 
 await Promise.all([
 	$`mkdir -p ${posixSdlBuildDir}`,
@@ -10,7 +10,6 @@ await $`make distclean || true`
 
 let crossCompileFlag = ''
 if (platform === 'darwin') {
-	process.env.CC = 'clang'
 	if (process.env.M1) {
 		crossCompileFlag = '--host=arm-apple-darwin'
 		process.env.CFLAGS = `${process.env.CFLAGS ?? ''} -mmacosx-version-min=11.0 -I/usr/local/include`.trim()
