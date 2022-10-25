@@ -11,7 +11,7 @@ await $`make distclean || true`
 let crossCompileFlag = ''
 if (platform === 'darwin') {
 	if (process.env.M1) {
-		crossCompileFlag = '--host=arm64-apple-macos11'
+		crossCompileFlag = '--host=arm64-apple-darwin'
 		process.env.CFLAGS = `${process.env.CFLAGS ?? ''} -target arm64-apple-macos11 -mmacosx-version-min=11.0 -I/usr/local/include`.trim()
 		process.env.CLANG_LINK_ARM64 = `${process.env.LDFLAGS ?? ''} -mmacosx-version-min=11.0`.trim()
 	} else {
