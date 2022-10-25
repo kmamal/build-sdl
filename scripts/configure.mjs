@@ -10,6 +10,7 @@ await $`make distclean || true`
 
 let crossCompileFlag = ''
 if (platform === 'darwin') {
+	process.env.CC = 'clang'
 	if (process.env.M1) {
 		crossCompileFlag = '--host=arm-apple-darwin'
 		process.env.CFLAGS = `${process.env.CFLAGS ?? ''} -target=arm-apple-darwin -mmacosx-version-min=11.0 -I/usr/local/include`.trim()
