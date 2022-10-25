@@ -1,4 +1,4 @@
-import { sdlBuildDir, sdlOutDir } from '../src/common.js'
+import { sdlBuildDir, sdlOutDir } from './common.mjs'
 
 cd(sdlBuildDir)
 await $`make -j$(nproc)`

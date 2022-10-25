@@ -1,4 +1,4 @@
-import { owner, repo, version, sdlDir, sdlOutDir, assetName } from '../src/common.js'
+import { owner, repo, version, sdlDir, sdlOutDir, assetName } from './common.mjs'
 
 const commonHeaders = {
 	Accept: 'application/vnd.github+json',
@@ -7,15 +7,16 @@ const commonHeaders = {
 
 let response
 
-$.verbose = false
 
 getRelease: {
 	echo("get release", version)
 
+	$.verbose = false
 	response = await fetch(
 		`https://api.github.com/repos/${owner}/${repo}/releases/tags/v${version}`,
 		{ headers: commonHeaders },
 	)
+	$.verbose = true
 
 	if (response.ok) {
 		echo("release exists", version)
@@ -25,6 +26,7 @@ getRelease: {
 	echo("bad status code", response.status)
 	echo("create release", version)
 
+	$.verbose = false
 	response = await fetch(
 		`https://api.github.com/repos/${owner}/${repo}/releases`,
 		{
@@ -36,6 +38,7 @@ getRelease: {
 			}),
 		},
 	)
+	$.verbose = true
 	if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 }
 const releaseId = (await response.json()).id
@@ -43,20 +46,23 @@ const releaseId = (await response.json()).id
 cd(sdlDir)
 echo("create archive", assetName)
 
-const assetFile = path.resolve(sdlDir, assetName)
-await $`tar czf ${assetFile} ${path.relative(sdlDir, sdlOutDir)}`
+const assetFile = path.posix.resolve(sdlDir, assetName)
+await $`tar czf ${assetFile} ${path.posix.relative(sdlDir, sdlOutDir)}`
 const buffer = await fs.readFile(assetFile)
 
+$.verbose = false
 response = await fetch(
 	`https://api.github.com/repos/${owner}/${repo}/releases/${releaseId}/assets`,
 	{ headers: commonHeaders },
 )
+$.verbose = true
 if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 
 const list = await response.json()
 const asset = list.find((x) => x.name === assetName)
 if (asset) {
 	echo("delete asset", assetName)
+	$.verbose = false
 	response = await fetch(
 		`https://api.github.com/repos/${owner}/${repo}/releases/assets/${asset.id}`,
 		{
@@ -64,10 +70,12 @@ if (asset) {
 			method: 'DELETE',
 		},
 	)
+	$.verbose = true
 	if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 }
 
 echo("upload", assetName)
+$.verbose = false
 response = await fetch(
 	`https://uploads.github.com/repos/${owner}/${repo}/releases/${releaseId}/assets?name=${assetName}`,
 	{
@@ -80,4 +88,5 @@ response = await fetch(
 		body: buffer,
 	},
 )
+$.verbose = true
 if (!response.ok) { throw new Error(`bad status code ${response.status}`) }

@@ -1,8 +1,8 @@
-import { sdlBuildDir, sdlOutDir } from '../src/common.js'
+import { sdlBuildDir, sdlOutDir } from './common.mjs'
 
 await Promise.all([
-	fs.mkdirp(sdlBuildDir),
-	fs.mkdirp(sdlOutDir),
+	$`mkdir -p ${sdlBuildDir}`,
+	$`mkdir -p ${sdlOutDir}`,
 ])
 
 cd(sdlBuildDir)

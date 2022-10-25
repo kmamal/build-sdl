@@ -1,6 +1,6 @@
-import { rootDir, sdlDir } from '../src/common.js'
+import { sdlDir } from './common.mjs'
 
 await Promise.all([
-	fs.remove(path.resolve(rootDir, 'node_modules')),
-	fs.remove(sdlDir),
+	$`rm -rf node_modules`,
+	$`rm -rf ${sdlDir}`,
 ])

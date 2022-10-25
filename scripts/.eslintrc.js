@@ -4,6 +4,7 @@ module.exports = {
 		$: true,
 		cd: true,
 		fs: true,
+		os: true,
 		path: true,
 		fetch: true,
 		echo: true,
