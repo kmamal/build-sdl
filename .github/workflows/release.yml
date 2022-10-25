@@ -41,6 +41,7 @@ jobs:
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-ninja
             mingw-w64-x86_64-pkg-config
+      - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
       - run: |
           echo 'PATH="${PATH}:/c/Program Files/nodejs/"' >> /etc/profile
           echo 'export PATH' >> /etc/profile
