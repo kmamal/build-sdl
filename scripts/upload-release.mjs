@@ -1,4 +1,8 @@
-import { owner, repo, version, sysSdlDir, posixSdlDir, posixSdlOutDir, assetName } from './common.mjs'
+import {
+	owner, repo, version,
+	sysDistDir, sysPublishDir,
+	assetName,
+} from './common.mjs'
 
 const commonHeaders = {
 	Accept: 'application/vnd.github+json',
@@ -6,7 +10,6 @@ const commonHeaders = {
 }
 
 let response
-
 
 getRelease: {
 	echo("get release", version)
@@ -44,10 +47,12 @@ getRelease: {
 const releaseId = (await response.json()).id
 
 echo("create archive", assetName)
+await $`mkdir -p ${sysPublishDir}`
+const assetPath = path.join(sysPublishDir, assetName)
 
-cd(sysSdlDir)
-await $`tar czf ${assetName} ${path.posix.relative(posixSdlDir, posixSdlOutDir)}`
-const buffer = await fs.readFile(assetName)
+cd(sysDistDir)
+await $`tar czf ${assetPath} *`
+const buffer = await fs.readFile(assetPath)
 
 $.verbose = false
 response = await fetch(

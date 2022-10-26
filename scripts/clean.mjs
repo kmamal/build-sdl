@@ -1,6 +1,17 @@
-import { posixSdlDir } from './common.mjs'
+import {
+	sysRootDir,
+	posixSrcDir,
+	posixBuildDir,
+	posixDistDir,
+	posixPublishDir,
+} from './common.mjs'
 
-await Promise.all([
-	$`rm -rf node_modules`,
-	$`rm -rf ${posixSdlDir}`,
-])
+const dirs = [
+	posixSrcDir,
+	posixBuildDir,
+	posixDistDir,
+	posixPublishDir,
+]
+
+cd(sysRootDir)
+await $`rm -rf node_modules ${dirs}`

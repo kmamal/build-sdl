@@ -1,15 +1,22 @@
-import { platform, posixSdlDir, posixSdlBuildDir, posixSdlOutDir, sysSdlBuildDir } from './common.mjs'
+import {
+	platform,
+	posixSrcDir,
+	posixBuildDir,
+	posixDistDir,
+	sysSrcDir,
+	sysBuildDir,
+} from './common.mjs'
 
 await Promise.all([
-	$`mkdir -p ${posixSdlBuildDir}`,
-	$`mkdir -p ${posixSdlOutDir}`,
+	$`mkdir -p ${posixBuildDir}`,
+	$`mkdir -p ${posixDistDir}`,
 ])
 
-cd(sysSdlBuildDir)
+cd(sysBuildDir)
 await $`make distclean || true`
 
 if (platform === 'darwin') {
-	const clangPath = path.join(posixSdlDir, 'build-scripts/clang-fat.sh')
+	const clangPath = path.join(sysSrcDir, 'build-scripts/clang-fat.sh')
 	process.env.CC = `sh ${clangPath}`
 }
-await $`../configure --prefix=${posixSdlOutDir}`
+await $`${posixSrcDir}/configure --prefix=${posixDistDir}`
