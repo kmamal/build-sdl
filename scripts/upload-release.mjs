@@ -1,6 +1,6 @@
 import {
 	owner, repo, version,
-	sysDistDir, sysPublishDir,
+	sysDistDir, sysPublishDir, posixPublishDir,
 	assetName,
 } from './common.mjs'
 
@@ -47,12 +47,13 @@ getRelease: {
 const releaseId = (await response.json()).id
 
 echo("create archive", assetName)
-await $`mkdir -p ${sysPublishDir}`
-const assetPath = path.join(sysPublishDir, assetName)
+await $`mkdir -p ${posixPublishDir}`
+const sysAssetPath = path.join(sysPublishDir, assetName)
+const posixAssetPath = path.posix.join(posixPublishDir, assetName)
 
 cd(sysDistDir)
-await $`tar czf ${assetPath} *`
-const buffer = await fs.readFile(assetPath)
+await $`tar czf ${posixAssetPath} *`
+const buffer = await fs.readFile(sysAssetPath)
 
 $.verbose = false
 response = await fetch(
