@@ -1,9 +1,9 @@
 
 export const sysRootDir = path.dirname(__dirname)
-export const sysSrcDir = path.posix.join(sysRootDir, 'src')
-export const sysBuildDir = path.posix.join(sysRootDir, 'build')
-export const sysDistDir = path.posix.join(sysRootDir, 'dist')
-export const sysPublishDir = path.posix.join(sysRootDir, 'publish')
+export const sysSrcDir = path.join(sysRootDir, 'src')
+export const sysBuildDir = path.join(sysRootDir, 'build')
+export const sysDistDir = path.join(sysRootDir, 'dist')
+export const sysPublishDir = path.join(sysRootDir, 'publish')
 
 export const posixRootDir = await within(async () => {
 	$.verbose = false
