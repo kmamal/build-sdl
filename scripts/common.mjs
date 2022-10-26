@@ -19,7 +19,7 @@ export const posixPublishDir = path.posix.join(posixRootDir, 'publish')
 
 const pkg = await fs.readJson(path.join(sysRootDir, 'package.json'))
 export const version = pkg.version.slice(0, pkg.version.indexOf('-'))
-export const [ , owner, repo ] = pkg.repository.url.match(/^git@github.com:([^/]+)\/([^.]+).git$/u)
+export const [ , owner, repo ] = pkg.repository.url.match(/([^/:]+)\/([^/]+).git$/u)
 
 export const { platform } = process
 export const arch = os.arch()
