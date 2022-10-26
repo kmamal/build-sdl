@@ -43,4 +43,4 @@ jobs:
 
       - run: |
           npm install --no-save zx
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run publish
+          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run release

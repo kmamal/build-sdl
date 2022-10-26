@@ -15,7 +15,7 @@
     "configure": "cd scripts && zx configure.mjs",
     "make": "cd scripts && zx make.mjs",
     "upload-release": "cd scripts && zx upload-release.mjs",
-    "publish": "cd scripts && zx publish.mjs",
+    "release": "cd scripts && zx release.mjs",
     "clean": "cd scripts && zx clean.mjs",
     "install-deps-ubuntu": "./scripts/install-deps-ubuntu.sh",
     "install-deps-mac": "./scripts/install-deps-mac.sh"
