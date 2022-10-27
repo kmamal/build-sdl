@@ -34,5 +34,7 @@ await $`cmake ${[
 	posixSrcDir,
 	'-DCMAKE_BUILD_TYPE=Release',
 	`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
+	'-DSDL_TESTS=OFF',
+	'-DSDL_INSTALL_TESTS=OFF',
 	crossCompileFlag,
 ]}`
