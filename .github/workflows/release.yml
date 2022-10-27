@@ -10,8 +10,8 @@ jobs:
       matrix:
         platform:
           # - { name: 'Linux'   ,os: ubuntu-22.04 ,shell: 'bash'      }
-          - { name: 'Mac'     ,os: macos-12     ,shell: 'bash'      }
-          - { name: 'Mac'     ,os: macos-12     ,shell: 'bash', m1: true      }
+          # - { name: 'Mac'     ,os: macos-12     ,shell: 'bash'      }
+          - { name: 'Mac (arm64)'     ,os: macos-12     ,shell: 'bash', m1: true      }
           # - { name: 'Windows' ,os: windows-2022 ,shell: 'msys2 {0}' }
 
     runs-on: ${{ matrix.platform.os }}
@@ -29,17 +29,15 @@ jobs:
         run: npm run install-deps-mac
 
       - if: ${{ matrix.platform.m1 }}
-        run: echo "CROSS_COMPILE_M1=1" >> $GITHUB_ENV
+        run: echo "CROSS_COMPILE_ARCH=arm64" >> $GITHUB_ENV
 
       - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
         uses: msys2/setup-msys2@v2
         with:
           msystem: mingw64
           install: >-
-            make
+            cmake
             mingw-w64-x86_64-cc
-            mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-ninja
       - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
         run: |
           echo 'PATH="${PATH}:/c/Program Files/nodejs/"' >> /etc/profile

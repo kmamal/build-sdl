@@ -23,7 +23,7 @@ export const [ , owner, repo ] = pkg.repository.url.match(/([^/:]+)\/([^/]+).git
 
 export const { platform } = process
 export const arch = os.arch()
-export const targetArch = platform === 'darwin' && process.env.CROSS_COMPILE_M1 ? 'arm64' : arch
+export const targetArch = process.env.CROSS_COMPILE_ARCH ?? arch
 export const assetName = `SDL-v${version}-${platform}-${targetArch}.tar.gz`
 export const sharedLibExt = {
 	linux: '.so',

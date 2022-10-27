@@ -1,2 +1,2 @@
 
-brew install ninja
+brew install xquartz

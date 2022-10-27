@@ -1,9 +1,6 @@
 import {
-	platform,
-	posixSrcDir,
-	posixBuildDir,
-	posixDistDir,
-	sysSrcDir,
+	platform, targetArch,
+	posixSrcDir, posixBuildDir, posixDistDir,
 	sysBuildDir,
 } from './common.mjs'
 
@@ -15,19 +12,26 @@ await Promise.all([
 cd(sysBuildDir)
 await $`make distclean || true`
 
-let hostFlag = ''
-if (platform === 'darwin') {
-	// const clangPath = path.join(sysSrcDir, 'build-scripts/clang-fat.sh')
-	// process.env.CC = `sh ${clangPath}`
+const crossCompileFlag = process.env.CROSS_COMPILE_ARCH
+	? `-DCMAKE_OSX_ARCHITECTURES="${process.env.CROSS_COMPILE_ARCH}"`
+	: ''
 
-	if (process.env.CROSS_COMPILE_M1) {
-		hostFlag = '--host=aarch64-apple-darwin'
-		process.env.CFLAGS = '-mmacosx-version-min=11.0' // -I/usr/local/include
+if (platform === 'darwin') {
+	if (targetArch === 'arm64') {
+		process.env.CFLAGS = '-mmacosx-version-min=11.0'
 		process.env.LDFLAGS = '-mmacosx-version-min=11.0'
 	} else {
-		process.env.CFLAGS = '-mmacosx-version-min=10.9 -DMAC_OS_X_VERSION_MIN_REQUIRED=1070' // -I/usr/local/include
+		process.env.CFLAGS = [
+			'-mmacosx-version-min=10.9',
+			'-DMAC_OS_X_VERSION_MIN_REQUIRED=1070',
+		].join(' ')
 		process.env.LDFLAGS = '-mmacosx-version-min=10.9'
 	}
 }
 
-await $`${posixSrcDir}/configure ${hostFlag} --prefix=${posixDistDir}`
+await $`cmake ${[
+	posixSrcDir,
+	'-DCMAKE_BUILD_TYPE=Release',
+	`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
+	crossCompileFlag,
+]}`
