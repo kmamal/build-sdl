@@ -36,6 +36,7 @@ jobs:
         with:
           msystem: mingw64
           install: >-
+            make
             cmake
             mingw-w64-x86_64-cc
       - if: ${{ startsWith(matrix.platform.os, 'windows-') }}

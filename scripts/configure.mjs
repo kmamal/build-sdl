@@ -4,13 +4,14 @@ import {
 	sysBuildDir,
 } from './common.mjs'
 
+await $`rm -rf ${posixBuildDir} ${posixDistDir}`
+
 await Promise.all([
 	$`mkdir -p ${posixBuildDir}`,
 	$`mkdir -p ${posixDistDir}`,
 ])
 
 cd(sysBuildDir)
-await $`make distclean || true`
 
 const crossCompileFlag = process.env.CROSS_COMPILE_ARCH
 	? `-DCMAKE_OSX_ARCHITECTURES="${process.env.CROSS_COMPILE_ARCH}"`
