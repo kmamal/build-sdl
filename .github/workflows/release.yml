@@ -9,9 +9,10 @@ jobs:
     strategy:
       matrix:
         platform:
-          - { name: 'Linux'   ,os: ubuntu-22.04 ,shell: 'bash'      }
+          # - { name: 'Linux'   ,os: ubuntu-22.04 ,shell: 'bash'      }
           - { name: 'Mac'     ,os: macos-12     ,shell: 'bash'      }
-          - { name: 'Windows' ,os: windows-2022 ,shell: 'msys2 {0}' }
+          - { name: 'Mac'     ,os: macos-12     ,shell: 'bash', m1: true      }
+          # - { name: 'Windows' ,os: windows-2022 ,shell: 'msys2 {0}' }
 
     runs-on: ${{ matrix.platform.os }}
     defaults:
@@ -27,6 +28,9 @@ jobs:
       - if: ${{ startsWith(matrix.platform.os, 'macos-') }}
         run: npm run install-deps-mac
 
+      - if: ${{ matrix.platform.m1 }}
+        run: echo "CROSS_COMPILE_M1=1" >> $GITHUB_ENV
+
       - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
         uses: msys2/setup-msys2@v2
         with:
@@ -41,6 +45,4 @@ jobs:
           echo 'PATH="${PATH}:/c/Program Files/nodejs/"' >> /etc/profile
           echo 'export PATH' >> /etc/profile
 
-      - run: |
-          npm install --no-save zx
-          GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run release
+      - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run release
