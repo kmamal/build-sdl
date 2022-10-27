@@ -21,8 +21,7 @@ const pkg = await fs.readJson(path.join(sysRootDir, 'package.json'))
 export const version = pkg.version.slice(0, pkg.version.indexOf('-'))
 export const [ , owner, repo ] = pkg.repository.url.match(/([^/:]+)\/([^/]+).git$/u)
 
-export const { platform } = process
-export const arch = os.arch()
+export const { platform, arch } = process
 export const targetArch = process.env.CROSS_COMPILE_ARCH ?? arch
 export const assetName = `SDL-v${version}-${platform}-${targetArch}.tar.gz`
 export const sharedLibExt = {
