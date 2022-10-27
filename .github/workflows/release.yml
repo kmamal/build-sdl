@@ -10,7 +10,7 @@ jobs:
       matrix:
         platform:
           # - { name: 'Linux'       ,os: ubuntu-22.04 ,shell: 'bash'                }
-          - { name: 'Mac    '     ,os: macos-12     ,shell: 'bash'                }
+          - { name: 'Mac'         ,os: macos-12     ,shell: 'bash'                }
           - { name: 'Mac (arm64)' ,os: macos-12     ,shell: 'bash'      ,m1: true }
           # - { name: 'Windows'     ,os: windows-2022 ,shell: 'msys2 {0}'           }
 
