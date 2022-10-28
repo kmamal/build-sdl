@@ -1,5 +1,5 @@
 {
-  "version": "2.24.1-1",
+  "version": "2.24.1-2",
   "name": "@kmamal/build-sdl",
   "description": "build-sdl",
   "repository": {
@@ -20,8 +20,5 @@
     "install-deps-ubuntu": "./scripts/install-deps-ubuntu.sh",
     "install-deps-mac": "./scripts/install-deps-mac.sh"
   },
-  "license": "MIT",
-  "dependencies": {
-    "zx": "^7.1.1"
-  }
+  "license": "MIT"
 }
