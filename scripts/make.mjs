@@ -1,7 +1,11 @@
 import {
 	platform,
+	posixDistDir,
 	sysSrcDir, sysBuildDir, sysDistDir,
 } from './common.mjs'
+
+await $`rm -rf ${posixDistDir}`
+await $`mkdir -p ${posixDistDir}`
 
 switch (platform) {
 	case 'linux': {
