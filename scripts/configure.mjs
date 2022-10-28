@@ -1,6 +1,6 @@
 import {
 	platform, targetArch,
-	posixBuildDir, posixDistDir,
+	posixSrcDir, posixBuildDir, posixDistDir,
 	sysSrcDir, sysBuildDir, sysDistDir,
 } from './common.mjs'
 
@@ -10,7 +10,7 @@ await $`mkdir -p ${posixBuildDir}`
 switch (platform) {
 	case 'linux': {
 		cd(sysBuildDir)
-		await $`../configure --prefix=${posixDistDir}`
+		await $`${path.join(posixSrcDir, 'configure')} --prefix=${posixDistDir}`
 	} break
 
 	case 'darwin': {
@@ -31,10 +31,10 @@ switch (platform) {
 
 		await $`cmake ${[
 			'-S',
-			sysSrcDir,
+			posixSrcDir,
 			'-B',
-			sysBuildDir,
-			`-DCMAKE_INSTALL_PREFIX:PATH=${sysDistDir}`,
+			posixBuildDir,
+			`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
 			'-DCMAKE_BUILD_TYPE=Release',
 			'-DSDL_TESTS=OFF',
 			'-DSDL_INSTALL_TESTS=OFF',
@@ -51,9 +51,9 @@ switch (platform) {
 
 		await $`cmake ${[
 			'-S',
-			sysBuildDir,
+			posixBuildDir,
 			'-B',
-			sysBuildDir,
+			posixBuildDir,
 			`-DCMAKE_INSTALL_PREFIX:PATH=${sysDistDir}`,
 			'-DCMAKE_BUILD_TYPE=Release',
 			'-DSDL_TESTS=OFF',
