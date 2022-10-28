@@ -1,6 +1,7 @@
 import Fs from 'node:fs'
 import Path from 'node:path'
 import C from './util/common.js'
+import { fetch } from './util/fetch.js'
 import Tar from 'tar'
 
 const commonHeaders = {

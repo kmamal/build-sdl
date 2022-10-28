@@ -16,9 +16,6 @@ jobs:
           - { name: 'Mac (arm64)'   ,os: macos-12     ,arch: arm64 }
 
     runs-on: ${{ matrix.platform.os }}
-    defaults:
-      run:
-        shell: 'bash'
 
     steps:
       - uses: actions/checkout@v3
@@ -31,18 +28,5 @@ jobs:
 
       - if: ${{ matrix.platform.arch }}
         run: echo "CROSS_COMPILE_ARCH=${{ matrix.platform.arch }}" >> $GITHUB_ENV
-
-      # - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
-      #   uses: msys2/setup-msys2@v2
-      #   with:
-      #     msystem: mingw64
-      #     install: >-
-      #       mingw-w64-x86_64-cc
-      #       mingw-w64-x86_64-make
-      #       mingw-w64-x86_64-cmake
-      # - if: ${{ startsWith(matrix.platform.os, 'windows-') }}
-      #   run: |
-      #     echo 'PATH="${PATH}:/c/Program Files/nodejs/"' >> /etc/profile
-      #     echo 'export PATH' >> /etc/profile
 
       - run: GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }} npm run release

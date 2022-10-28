@@ -4,12 +4,16 @@ import { execSync } from 'node:child_process'
 import C from './util/common.js'
 
 console.log("build in", C.dir.build)
-execSync(`cmake --build "${C.dir.posix.build}" --config Release --parallel`)
+execSync(`cmake --build "${C.dir.posix.build}" --config Release --parallel`, {
+	stdio: 'inherit',
+})
 
 console.log("install to", C.dir.dist)
 await Fs.promises.rm(C.dir.dist, { recursive: true }).catch(() => {})
 await Fs.promises.mkdir(C.dir.dist, { recursive: true })
-execSync(`cmake --install "${C.dir.posix.build}" --config Release`)
+execSync(`cmake --install "${C.dir.posix.build}" --config Release`, {
+	stdio: 'inherit',
+})
 
 process.chdir(C.dir.dist)
 

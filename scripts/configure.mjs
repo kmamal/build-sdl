@@ -35,4 +35,6 @@ execSync(`cmake ${[
 	'-DSDL_TESTS=OFF',
 	'-DSDL_INSTALL_TESTS=OFF',
 	crossCompileFlag,
-].filter(Boolean).join(' ')}`)
+].filter(Boolean).join(' ')}`, {
+	stdio: 'inherit',
+})
