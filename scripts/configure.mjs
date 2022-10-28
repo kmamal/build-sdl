@@ -1,7 +1,7 @@
 import {
 	platform, targetArch,
 	posixSrcDir, posixBuildDir, posixDistDir,
-	sysSrcDir, sysBuildDir, sysDistDir,
+	sysBuildDir,
 } from './common.mjs'
 
 await $`rm -rf ${posixBuildDir}`
@@ -46,7 +46,7 @@ switch (platform) {
 		await fs.writeFile(path.join(sysBuildDir, 'CMakeLists.txt'), [
 			'cmake_minimum_required(VERSION 3.0)',
 			'project(sdl_user)',
-			`add_subdirectory(${sysSrcDir} SDL)`,
+			`add_subdirectory(${posixSrcDir} SDL)`,
 		].join('\n'))
 
 		await $`cmake ${[
