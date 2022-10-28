@@ -44,7 +44,7 @@ switch (platform) {
 const pattern = {
 	linux: [ '!', '-name', '*.so*' ],
 	darwin: [ '!', '-name', '*.dylib' ],
-	win32: [ '!', '-name', '*.dll', '-and', '!', '-name', '*.lib' ],
+	win32: [ '!', '-name', 'SDL2.dll', '-and', '!', '-name', 'SDL2.lib' ],
 }[platform]
 
 cd(sysDistDir)
