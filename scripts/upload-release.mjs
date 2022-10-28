@@ -1,9 +1,7 @@
-import {
-	owner, repo, version,
-	sysDistDir, sysPublishDir,
-	posixPublishDir,
-	assetName,
-} from './common.mjs'
+import Fs from 'node:fs'
+import Path from 'node:path'
+import C from './util/common.js'
+import Tar from 'tar'
 
 const commonHeaders = {
 	Accept: 'application/vnd.github+json',
@@ -13,87 +11,74 @@ const commonHeaders = {
 let response
 
 getRelease: {
-	echo("get release", version)
+	console.log("get release", C.version)
 
-	$.verbose = false
-	response = await fetch(
-		`https://api.github.com/repos/${owner}/${repo}/releases/tags/v${version}`,
-		{ headers: commonHeaders },
-	)
-	$.verbose = true
-
-	if (response.ok) {
-		echo("release exists", version)
+	try {
+		response = await fetch(
+			`https://api.github.com/repos/${C.owner}/${C.repo}/releases/tags/v${C.version}`,
+			{ headers: commonHeaders },
+		)
+		console.log("release exists", C.version)
 		break getRelease
+	} catch (error) {
+		console.log(error.message)
 	}
 
-	echo("bad status code", response.status)
-	echo("create release", version)
+	console.log("create release", C.version)
 
-	$.verbose = false
 	response = await fetch(
-		`https://api.github.com/repos/${owner}/${repo}/releases`,
+		`https://api.github.com/repos/${C.owner}/${C.repo}/releases`,
 		{
-			headers: commonHeaders,
 			method: 'POST',
+			headers: commonHeaders,
 			body: JSON.stringify({
-				tag_name: `v${version}`, // eslint-disable-line camelcase
-				name: `v${version}`,
+				tag_name: `v${C.version}`, // eslint-disable-line camelcase
+				name: `v${C.version}`,
 			}),
 		},
 	)
-	$.verbose = true
-	if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 }
 const releaseId = (await response.json()).id
 
-echo("create archive", assetName)
-await $`rm -rf ${posixPublishDir}`
-await $`mkdir -p ${posixPublishDir}`
-const sysAssetPath = path.join(sysPublishDir, assetName)
-const posixAssetPath = path.posix.join(posixPublishDir, assetName)
+console.log("create archive", C.assetName)
+await Fs.promises.rm(C.dir.publish, { recursive: true }).catch(() => {})
+await Fs.promises.mkdir(C.dir.publish, { recursive: true })
+const assetPath = Path.join(C.dir.publish, C.assetName)
 
-cd(sysDistDir)
-await $`tar czf ${posixAssetPath} *`
-const buffer = await fs.readFile(sysAssetPath)
+process.chdir(C.dir.dist)
+await Tar.create(
+	{ gzip: true, file: assetPath },
+	await Fs.promises.readdir('.'),
+)
+const buffer = await Fs.promises.readFile(assetPath)
 
-$.verbose = false
 response = await fetch(
-	`https://api.github.com/repos/${owner}/${repo}/releases/${releaseId}/assets`,
+	`https://api.github.com/repos/${C.owner}/${C.repo}/releases/${releaseId}/assets`,
 	{ headers: commonHeaders },
 )
-$.verbose = true
-if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 
 const list = await response.json()
-const asset = list.find((x) => x.name === assetName)
+const asset = list.find((x) => x.name === C.assetName)
 if (asset) {
-	echo("delete asset", assetName)
-	$.verbose = false
-	response = await fetch(
-		`https://api.github.com/repos/${owner}/${repo}/releases/assets/${asset.id}`,
+	console.log("delete asset", C.assetName)
+	await fetch(
+		`https://api.github.com/repos/${C.owner}/${C.repo}/releases/assets/${asset.id}`,
 		{
-			headers: commonHeaders,
 			method: 'DELETE',
+			headers: commonHeaders,
 		},
 	)
-	$.verbose = true
-	if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 }
 
-echo("upload", assetName)
-$.verbose = false
-response = await fetch(
-	`https://uploads.github.com/repos/${owner}/${repo}/releases/${releaseId}/assets?name=${assetName}`,
+console.log("upload", C.assetName)
+await fetch(
+	`https://uploads.github.com/repos/${C.owner}/${C.repo}/releases/${releaseId}/assets?name=${C.assetName}`,
 	{
+		method: 'POST',
 		headers: {
 			...commonHeaders,
 			'Content-Type': 'application/gzip',
-			'Content-Length': buffer.length,
 		},
-		method: 'POST',
 		body: buffer,
 	},
 )
-$.verbose = true
-if (!response.ok) { throw new Error(`bad status code ${response.status}`) }

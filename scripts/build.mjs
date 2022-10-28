@@ -1,14 +1,15 @@
-import {
-	posixSrcDir, posixBuildDir, posixDistDir, posixPublishDir,
-} from './common.mjs'
+import Fs from 'node:fs'
+import C from './util/common.js'
 
-await $`rm -rf ${[
-	posixSrcDir,
-	posixBuildDir,
-	posixDistDir,
-	posixPublishDir,
-]}`
+await Promise.all([
+	C.dir.src,
+	C.dir.build,
+	C.dir.dist,
+	C.dir.publish,
+].map(async (dir) => {
+	await Fs.promises.rm(dir, { recursive: true }).catch(() => {})
+}))
 
-await $`npm run download-src`
-await $`npm run configure`
-await $`npm run make`
+await import('./download-src.mjs')
+await import('./configure.mjs')
+await import('./make.mjs')

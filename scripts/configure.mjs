@@ -1,72 +1,38 @@
-import {
-	platform, targetArch,
-	posixSrcDir, posixBuildDir, posixDistDir,
-} from './common.mjs'
+import Fs from 'node:fs'
+import { execSync } from 'node:child_process'
+import C from './util/common.js'
 
-await $`rm -rf ${posixBuildDir}`
-await $`mkdir -p ${posixBuildDir}`
+console.log("configure build in", C.dir.build)
 
-switch (platform) {
-	case 'linux': {
-		await $`cmake ${[
-			'-S',
-			posixSrcDir,
-			'-B',
-			posixBuildDir,
-			`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
-			'-DCMAKE_BUILD_TYPE=Release',
-			'-DSDL_TESTS=OFF',
-			'-DSDL_INSTALL_TESTS=OFF',
-		]}`
+await Fs.promises.rm(C.dir.build, { recursive: true }).catch(() => {})
+await Fs.promises.mkdir(C.dir.build, { recursive: true })
 
-		// cd(sysBuildDir)
-		// await $`${path.join(posixSrcDir, 'configure')} --prefix=${posixDistDir}`
-	} break
+let crossCompileFlag
+if (C.platform === 'darwin') {
+	crossCompileFlag = process.env.CROSS_COMPILE_ARCH
+		? `-DCMAKE_OSX_ARCHITECTURES="${process.env.CROSS_COMPILE_ARCH}"`
+		: ''
 
-	case 'darwin': {
-		const crossCompileFlag = process.env.CROSS_COMPILE_ARCH
-			? `-DCMAKE_OSX_ARCHITECTURES="${process.env.CROSS_COMPILE_ARCH}"`
-			: ''
-
-		if (targetArch === 'arm64') {
-			process.env.CFLAGS = '-mmacosx-version-min=11.0'
-			process.env.LDFLAGS = '-mmacosx-version-min=11.0'
-		} else {
-			process.env.CFLAGS = [
-				'-mmacosx-version-min=10.9',
-				'-DMAC_OS_X_VERSION_MIN_REQUIRED=1070',
-			].join(' ')
-			process.env.LDFLAGS = '-mmacosx-version-min=10.9'
-		}
-
-		await $`cmake ${[
-			'-S',
-			posixSrcDir,
-			'-B',
-			posixBuildDir,
-			`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
-			'-DCMAKE_BUILD_TYPE=Release',
-			'-DSDL_TESTS=OFF',
-			'-DSDL_INSTALL_TESTS=OFF',
-			crossCompileFlag,
-		]}`
-	} break
-
-	case 'win32': {
-		await $`cmake ${[
-			'-S',
-			posixSrcDir,
-			'-B',
-			posixBuildDir,
-			`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
-			'-DCMAKE_BUILD_TYPE=Release',
-			'-DSDL_TESTS=OFF',
-			'-DSDL_INSTALL_TESTS=OFF',
-		]}`
-	} break
-
-	default: {
-		echo("unsupported platform", platform)
-		process.exit(1)
+	if (C.targetArch === 'arm64') {
+		process.env.CFLAGS = '-mmacosx-version-min=11.0'
+		process.env.LDFLAGS = '-mmacosx-version-min=11.0'
+	} else {
+		process.env.CFLAGS = [
+			'-mmacosx-version-min=10.9',
+			'-DMAC_OS_X_VERSION_MIN_REQUIRED=1070',
+		].join(' ')
+		process.env.LDFLAGS = '-mmacosx-version-min=10.9'
 	}
 }
+
+execSync(`cmake ${[
+	'-S',
+	`"${C.dir.posix.src}"`,
+	'-B',
+	`"${C.dir.posix.build}"`,
+	`-DCMAKE_INSTALL_PREFIX:PATH="${C.dir.posix.dist}"`,
+	'-DCMAKE_BUILD_TYPE=Release',
+	'-DSDL_TESTS=OFF',
+	'-DSDL_INSTALL_TESTS=OFF',
+	crossCompileFlag,
+].filter(Boolean).join(' ')}`)

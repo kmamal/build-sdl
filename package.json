@@ -8,17 +8,20 @@
   },
   "main": "index.js",
   "scripts": {
-    "install": "cd scripts && npx -y zx install.mjs",
-    "download-release": "cd scripts && npx -y zx download-release.mjs",
-    "build": "cd scripts && npx -y zx build.mjs",
-    "download-src": "cd scripts && npx -y zx download-src.mjs",
-    "configure": "cd scripts && npx -y zx configure.mjs",
-    "make": "cd scripts && npx -y zx make.mjs",
-    "upload-release": "cd scripts && npx -y zx upload-release.mjs",
-    "release": "cd scripts && npx -y zx release.mjs",
-    "clean": "cd scripts && npx -y zx clean.mjs",
+    "install": "cd scripts && node install.mjs",
+    "download-release": "cd scripts && node download-release.mjs",
+    "build": "cd scripts && node build.mjs",
+    "download-src": "cd scripts && node download-src.mjs",
+    "configure": "cd scripts && node configure.mjs",
+    "make": "cd scripts && node make.mjs",
+    "upload-release": "cd scripts && node upload-release.mjs",
+    "release": "cd scripts && node release.mjs",
+    "clean": "cd scripts && node clean.mjs",
     "install-deps-ubuntu": "./scripts/install-deps-ubuntu.sh",
     "install-deps-mac": "./scripts/install-deps-mac.sh"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "tar": "^6.1.11"
+  }
 }

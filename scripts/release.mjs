@@ -1,5 +1,5 @@
 
-await $`npm run clean`
+await import('./clean.mjs')
 process.env.BUILD_SDL_FROM_SOURCE = 1
-await $`npm install`
-await $`npm run upload-release`
+await import('./install.mjs')
+await import('./upload-release.mjs')

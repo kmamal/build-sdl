@@ -1,56 +1,85 @@
-import {
-	platform,
-	posixBuildDir, posixDistDir,
-	sysSrcDir, sysBuildDir, sysDistDir,
-} from './common.mjs'
+import Fs from 'node:fs'
+import Path from 'node:path'
+import { execSync } from 'node:child_process'
+import C from './util/common.js'
 
-await $`rm -rf ${posixDistDir}`
-await $`mkdir -p ${posixDistDir}`
+console.log("build in", C.dir.build)
+execSync(`cmake --build "${C.dir.posix.build}" --config Release --parallel`)
 
-switch (platform) {
-	case 'linux': {
-		await $`cmake --build ${posixBuildDir} --config Release --parallel`
-		await $`cmake --install ${posixBuildDir} --config Release`
+console.log("install to", C.dir.dist)
+await Fs.promises.rm(C.dir.dist, { recursive: true }).catch(() => {})
+await Fs.promises.mkdir(C.dir.dist, { recursive: true })
+execSync(`cmake --install "${C.dir.posix.build}" --config Release`)
 
-		// cd(sysBuildDir)
-		// await $`make -j$(nproc)`
-		// await $`make install`
-	} break
+process.chdir(C.dir.dist)
 
-	case 'darwin': {
-		await $`cmake --build ${posixBuildDir} --config Release --parallel`
-		await $`cmake --install ${posixBuildDir} --config Release`
-	} break
+// Delete files we won't need
+{
+	const platformFilter = {
+		linux: (name) => name.includes('.so'),
+		darwin: (name) => name.endsWith('.dylib'),
+		win32: (name) => name === 'SDL2.dll' || name === 'SDL2.lib',
+	}[C.platform]
 
-	case 'win32': {
-		await $`cmake --build ${posixBuildDir} --config Release --parallel`
-		await $`cmake --install ${posixBuildDir} --config Release`
+	const recurse = async (dirPath) => {
+		const files = await Fs.promises.readdir(dirPath)
 
-		// await $`msbuild ${[
-		// 	path.join(sysSrcDir, 'VisualC/SDL.sln'),
-		// 	`/p:OutDir=${sysBuildDir}`,
-		// 	'/m /p:BuildInParallel=true',
-		// 	'/p:Platform=x64',
-		// 	'/p:Configuration=Release',
-		// ]}`
-	} break
+		await Promise.all(files.map(async (name) => {
+			const childPath = Path.join(dirPath, name)
+			const stats = await Fs.promises.stat(childPath)
+			if (stats.isDirectory()) {
+				await recurse(childPath)
+				return
+			}
 
-	default: {
-		echo("unsupported platform", platform)
-		process.exit(1)
+			if (name.endsWith('.h') || platformFilter(name)) { return }
+
+			await Fs.promises.rm(childPath)
+		}))
 	}
+	await recurse(C.dir.dist)
 }
 
-const pattern = {
-	linux: [ '!', '-name', '*.so*' ],
-	darwin: [ '!', '-name', '*.dylib' ],
-	win32: [ '!', '-name', 'SDL2.dll', '-and', '!', '-name', 'SDL2.lib' ],
-}[platform]
+// Move the .dll to the /lib folder
+const move = async (src, dst) => {
+	await Fs.promises.copyFile(src, dst)
+	await Fs.promises.rm(src)
+}
 
-cd(sysDistDir)
-await $`find . -type f ! -name '*.h' -and ${pattern} -exec rm -f {} +`
-await Promise.all([
-	$`mv bin/* lib || true`,
-	$`mv include/SDL2/* include`,
-])
-await $`find . -depth -type d -empty -delete`
+if (C.platform === 'win32') {
+	move(
+		Path.join(C.dir.dist, 'bin/SDL.dll'),
+		Path.join(C.dir.dist, 'lib/SDL.dll'),
+	)
+}
+
+// Move the headers to the root of /include
+{
+	const shallowDir = Path.join(C.dir.dist, 'include')
+	const deepDir = Path.join(shallowDir, 'SDL2')
+	const headers = await Fs.promises.readdir(deepDir)
+	await Promise.all(headers.map(async (name) => {
+		await move(
+			Path.join(deepDir, name),
+			Path.join(shallowDir, name),
+		)
+	}))
+}
+
+// Delete all empty dirs
+{
+	const recurse = async (dirPath) => {
+		const files1 = await Fs.promises.readdir(dirPath)
+		await Promise.all(files1.map(async (name) => {
+			const childPath = Path.join(dirPath, name)
+			const stats = await Fs.promises.stat(childPath)
+			if (stats.isDirectory()) { await recurse(childPath) }
+		}))
+
+		const files2 = await Fs.promises.readdir(dirPath)
+		if (files2.length === 0) {
+			await Fs.promises.rm(dirPath, { recursive: true })
+		}
+	}
+	await recurse(C.dir.dist)
+}
