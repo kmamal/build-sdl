@@ -1,6 +1,6 @@
 import {
 	platform,
-	posixDistDir,
+	posixBuildDir, posixDistDir,
 	sysSrcDir, sysBuildDir, sysDistDir,
 } from './common.mjs'
 
@@ -15,13 +15,13 @@ switch (platform) {
 	} break
 
 	case 'darwin': {
-		await $`cmake --build ${sysBuildDir} --config Release --parallel`
-		await $`cmake --install ${sysBuildDir} --config Release`
+		await $`cmake --build ${posixBuildDir} --config Release --parallel`
+		await $`cmake --install ${posixBuildDir} --config Release`
 	} break
 
 	case 'win32': {
-		await $`cmake --build ${sysBuildDir} --config Release --parallel`
-		await $`cmake --install ${sysBuildDir} --config Release`
+		await $`cmake --build ${posixBuildDir} --config Release --parallel`
+		await $`cmake --install ${posixBuildDir} --config Release`
 
 		// await $`msbuild ${[
 		// 	path.join(sysSrcDir, 'VisualC/SDL.sln'),
