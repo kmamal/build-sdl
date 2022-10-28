@@ -5,7 +5,6 @@ import {
 } from './common.mjs'
 
 await $`rm -rf ${posixBuildDir} ${posixDistDir}`
-
 await Promise.all([
 	$`mkdir -p ${posixBuildDir}`,
 	$`mkdir -p ${posixDistDir}`,

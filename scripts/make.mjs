@@ -1,7 +1,7 @@
 import { sysBuildDir, sysDistDir, sharedLibExt } from './common.mjs'
 
 cd(sysBuildDir)
-await $`cmake --build . --config Release`
+await $`cmake --build . --config Release --parallel`
 await $`cmake --install . --config Release`
 
 cd(sysDistDir)
