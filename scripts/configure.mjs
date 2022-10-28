@@ -1,18 +1,16 @@
 import {
 	platform, targetArch,
-	posixSrcDir, posixBuildDir, posixDistDir,
-	sysBuildDir,
+	posixBuildDir, posixDistDir,
+	sysSrcDir, sysBuildDir, sysDistDir,
 } from './common.mjs'
+
+await $`rm -rf ${posixBuildDir}`
+await $`mkdir -p ${posixBuildDir}`
 
 switch (platform) {
 	case 'linux': {
-		await $`rm -rf ${[
-			posixBuildDir,
-			posixDistDir,
-		]}`
-		await $`mkdir -p ${posixBuildDir}`
 		cd(sysBuildDir)
-		await $`../configure`
+		await $`../configure --prefix=${posixDistDir}`
 	} break
 
 	case 'darwin': {
@@ -31,11 +29,13 @@ switch (platform) {
 			process.env.LDFLAGS = '-mmacosx-version-min=10.9'
 		}
 
-		cd(sysBuildDir)
 		await $`cmake ${[
-			posixSrcDir,
+			'-S',
+			sysSrcDir,
+			'-B',
+			sysBuildDir,
+			`-DCMAKE_INSTALL_PREFIX:PATH=${sysDistDir}`,
 			'-DCMAKE_BUILD_TYPE=Release',
-			`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
 			'-DSDL_TESTS=OFF',
 			'-DSDL_INSTALL_TESTS=OFF',
 			crossCompileFlag,
@@ -43,7 +43,22 @@ switch (platform) {
 	} break
 
 	case 'win32': {
-		// Empty
+		await fs.writeFile(path.join(sysBuildDir, 'CMakeLists.txt'), [
+			'cmake_minimum_required(VERSION 3.0)',
+			'project(sdl_user)',
+			`add_subdirectory(${sysSrcDir} SDL)`,
+		].join('\n'))
+
+		await $`cmake ${[
+			'-S',
+			sysBuildDir,
+			'-B',
+			sysBuildDir,
+			`-DCMAKE_INSTALL_PREFIX:PATH=${sysDistDir}`,
+			'-DCMAKE_BUILD_TYPE=Release',
+			'-DSDL_TESTS=OFF',
+			'-DSDL_INSTALL_TESTS=OFF',
+		]}`
 	} break
 
 	default: {

@@ -1,5 +1,6 @@
 import {
 	owner, repo, version,
+	sysDistDir,
 	posixDistDir,
 	assetName,
 } from './common.mjs'
@@ -12,7 +13,7 @@ const response = await fetch(url)
 if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 $.verbose = true
 
-echo("unpack to", posixDistDir)
+echo("unpack to", sysDistDir)
 await $`rm -rf ${posixDistDir}`
 await $`mkdir -p ${posixDistDir}`
 const tar = $`tar xz -C ${posixDistDir}`

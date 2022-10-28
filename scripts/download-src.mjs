@@ -1,4 +1,8 @@
-import { version, posixSrcDir } from './common.mjs'
+import {
+	version,
+	posixSrcDir,
+	sysSrcDir,
+} from './common.mjs'
 
 const url = `https://github.com/libsdl-org/SDL/archive/refs/tags/release-${version}.tar.gz`
 
@@ -8,7 +12,7 @@ const response = await fetch(url)
 if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 $.verbose = true
 
-echo("unpack to", posixSrcDir)
+echo("unpack to", sysSrcDir)
 await $`rm -rf ${posixSrcDir}`
 await $`mkdir -p ${posixSrcDir}`
 const tar = $`tar xz -C ${posixSrcDir} --strip=1`

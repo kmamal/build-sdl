@@ -1,9 +1,12 @@
-import { posixSrcDir, posixBuildDir, posixDistDir } from './common.mjs'
+import {
+	posixSrcDir, posixBuildDir, posixDistDir, posixPublishDir,
+} from './common.mjs'
 
 await $`rm -rf ${[
 	posixSrcDir,
 	posixBuildDir,
 	posixDistDir,
+	posixPublishDir,
 ]}`
 
 await $`npm run download-src`

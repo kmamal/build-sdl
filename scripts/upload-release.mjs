@@ -1,6 +1,7 @@
 import {
 	owner, repo, version,
-	sysDistDir, sysPublishDir, posixPublishDir,
+	sysDistDir, sysPublishDir,
+	posixPublishDir,
 	assetName,
 } from './common.mjs'
 

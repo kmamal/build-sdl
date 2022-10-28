@@ -11,19 +11,21 @@ switch (platform) {
 	} break
 
 	case 'darwin': {
-		cd(sysBuildDir)
-		await $`cmake --build . --config Release --parallel`
-		await $`cmake --install . --config Release`
+		await $`cmake --build ${sysBuildDir} --config Release --parallel`
+		await $`cmake --install ${sysBuildDir} --config Release`
 	} break
 
 	case 'win32': {
-		await $`msbuild ${[
-			path.join(sysSrcDir, 'VisualC/SDL.sln'),
-			`/p:OutDir=${sysBuildDir}`,
-			'/m /p:BuildInParallel=true',
-			'/p:Platform=x64',
-			'/p:Configuration=Release',
-		]}`
+		await $`cmake --build ${sysBuildDir} --config Release --parallel`
+		await $`cmake --install ${sysBuildDir} --config Release`
+
+		// await $`msbuild ${[
+		// 	path.join(sysSrcDir, 'VisualC/SDL.sln'),
+		// 	`/p:OutDir=${sysBuildDir}`,
+		// 	'/m /p:BuildInParallel=true',
+		// 	'/p:Platform=x64',
+		// 	'/p:Configuration=Release',
+		// ]}`
 	} break
 
 	default: {
@@ -32,14 +34,13 @@ switch (platform) {
 	}
 }
 
-cd(sysDistDir)
-
 const pattern = {
 	linux: `! -name '*.so*'`,
 	darwin: `! -name '*.dylib'`,
 	win32: `! -name '*.dll' -and ! -name '*.lib'`,
 }[platform]
 
+cd(sysDistDir)
 await $`find . -type f ! -name '*.h' -and ${pattern} -exec rm -f {} +`
 await Promise.all([
 	$`mv bin/* lib || true`,
