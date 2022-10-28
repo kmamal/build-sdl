@@ -54,7 +54,7 @@ switch (platform) {
 			posixBuildDir,
 			'-B',
 			posixBuildDir,
-			`-DCMAKE_INSTALL_PREFIX:PATH=${sysDistDir}`,
+			`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
 			'-DCMAKE_BUILD_TYPE=Release',
 			'-DSDL_TESTS=OFF',
 			'-DSDL_INSTALL_TESTS=OFF',
