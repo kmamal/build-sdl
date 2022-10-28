@@ -9,9 +9,12 @@ await $`mkdir -p ${posixDistDir}`
 
 switch (platform) {
 	case 'linux': {
-		cd(sysBuildDir)
-		await $`make -j$(nproc)`
-		await $`make install`
+		await $`cmake --build ${posixBuildDir} --config Release --parallel`
+		await $`cmake --install ${posixBuildDir} --config Release`
+
+		// cd(sysBuildDir)
+		// await $`make -j$(nproc)`
+		// await $`make install`
 	} break
 
 	case 'darwin': {

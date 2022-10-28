@@ -1,7 +1,6 @@
 import {
 	platform, targetArch,
 	posixSrcDir, posixBuildDir, posixDistDir,
-	sysBuildDir,
 } from './common.mjs'
 
 await $`rm -rf ${posixBuildDir}`
@@ -9,8 +8,19 @@ await $`mkdir -p ${posixBuildDir}`
 
 switch (platform) {
 	case 'linux': {
-		cd(sysBuildDir)
-		await $`${path.join(posixSrcDir, 'configure')} --prefix=${posixDistDir}`
+		await $`cmake ${[
+			'-S',
+			posixSrcDir,
+			'-B',
+			posixBuildDir,
+			`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
+			'-DCMAKE_BUILD_TYPE=Release',
+			'-DSDL_TESTS=OFF',
+			'-DSDL_INSTALL_TESTS=OFF',
+		]}`
+
+		// cd(sysBuildDir)
+		// await $`${path.join(posixSrcDir, 'configure')} --prefix=${posixDistDir}`
 	} break
 
 	case 'darwin': {
@@ -43,15 +53,9 @@ switch (platform) {
 	} break
 
 	case 'win32': {
-		await fs.writeFile(path.join(sysBuildDir, 'CMakeLists.txt'), [
-			'cmake_minimum_required(VERSION 3.0)',
-			'project(sdl_user)',
-			`add_subdirectory(${posixSrcDir} SDL)`,
-		].join('\n'))
-
 		await $`cmake ${[
 			'-S',
-			posixBuildDir,
+			posixSrcDir,
 			'-B',
 			posixBuildDir,
 			`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
