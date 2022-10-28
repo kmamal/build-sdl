@@ -9,7 +9,7 @@ dir.dist = Path.join(dir.root, 'dist')
 dir.publish = Path.join(dir.root, 'publish')
 
 const makePosixPath = (path) => path
-	.replace(/^[A-Z]:\\/ug, (_, letter) => `/${letter.toLowerCase()}/`)
+	.replace(/^([A-Z]):\\/u, (_, letter) => `/${letter.toLowerCase()}/`)
 	.replaceAll(/\\/ug, '/')
 
 dir.posix = {}
