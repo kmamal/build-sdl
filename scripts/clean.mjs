@@ -6,12 +6,11 @@ import {
 	posixPublishDir,
 } from './common.mjs'
 
-const dirs = [
+cd(sysRootDir)
+await $`rm -rf ${[
+	'node_modules',
 	posixSrcDir,
 	posixBuildDir,
 	posixDistDir,
 	posixPublishDir,
-]
-
-cd(sysRootDir)
-await $`rm -rf node_modules ${dirs}`
+]}`

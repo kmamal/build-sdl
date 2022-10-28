@@ -47,6 +47,7 @@ getRelease: {
 const releaseId = (await response.json()).id
 
 echo("create archive", assetName)
+await $`rm -rf ${posixPublishDir}`
 await $`mkdir -p ${posixPublishDir}`
 const sysAssetPath = path.join(sysPublishDir, assetName)
 const posixAssetPath = path.posix.join(posixPublishDir, assetName)

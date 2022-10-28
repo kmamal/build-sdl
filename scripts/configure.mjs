@@ -4,36 +4,50 @@ import {
 	sysBuildDir,
 } from './common.mjs'
 
-await $`rm -rf ${posixBuildDir} ${posixDistDir}`
-await Promise.all([
-	$`mkdir -p ${posixBuildDir}`,
-	$`mkdir -p ${posixDistDir}`,
-])
+switch (platform) {
+	case 'linux': {
+		await $`rm -rf ${[
+			posixBuildDir,
+			posixDistDir,
+		]}`
+		await $`mkdir -p ${posixBuildDir}`
+		cd(sysBuildDir)
+		await $`../configure`
+	} break
 
-cd(sysBuildDir)
+	case 'darwin': {
+		const crossCompileFlag = process.env.CROSS_COMPILE_ARCH
+			? `-DCMAKE_OSX_ARCHITECTURES="${process.env.CROSS_COMPILE_ARCH}"`
+			: ''
 
-const crossCompileFlag = process.env.CROSS_COMPILE_ARCH
-	? `-DCMAKE_OSX_ARCHITECTURES="${process.env.CROSS_COMPILE_ARCH}"`
-	: ''
+		if (targetArch === 'arm64') {
+			process.env.CFLAGS = '-mmacosx-version-min=11.0'
+			process.env.LDFLAGS = '-mmacosx-version-min=11.0'
+		} else {
+			process.env.CFLAGS = [
+				'-mmacosx-version-min=10.9',
+				'-DMAC_OS_X_VERSION_MIN_REQUIRED=1070',
+			].join(' ')
+			process.env.LDFLAGS = '-mmacosx-version-min=10.9'
+		}
 
-if (platform === 'darwin') {
-	if (targetArch === 'arm64') {
-		process.env.CFLAGS = '-mmacosx-version-min=11.0'
-		process.env.LDFLAGS = '-mmacosx-version-min=11.0'
-	} else {
-		process.env.CFLAGS = [
-			'-mmacosx-version-min=10.9',
-			'-DMAC_OS_X_VERSION_MIN_REQUIRED=1070',
-		].join(' ')
-		process.env.LDFLAGS = '-mmacosx-version-min=10.9'
+		cd(sysBuildDir)
+		await $`cmake ${[
+			posixSrcDir,
+			'-DCMAKE_BUILD_TYPE=Release',
+			`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
+			'-DSDL_TESTS=OFF',
+			'-DSDL_INSTALL_TESTS=OFF',
+			crossCompileFlag,
+		]}`
+	} break
+
+	case 'win32': {
+		// Empty
+	} break
+
+	default: {
+		echo("unsupported platform", platform)
+		process.exit(1)
 	}
 }
-
-await $`cmake ${[
-	posixSrcDir,
-	'-DCMAKE_BUILD_TYPE=Release',
-	`-DCMAKE_INSTALL_PREFIX:PATH=${posixDistDir}`,
-	'-DSDL_TESTS=OFF',
-	'-DSDL_INSTALL_TESTS=OFF',
-	crossCompileFlag,
-]}`

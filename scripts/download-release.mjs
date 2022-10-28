@@ -13,6 +13,7 @@ if (!response.ok) { throw new Error(`bad status code ${response.status}`) }
 $.verbose = true
 
 echo("unpack to", posixDistDir)
+await $`rm -rf ${posixDistDir}`
 await $`mkdir -p ${posixDistDir}`
 const tar = $`tar xz -C ${posixDistDir}`
 response.body.pipe(tar.stdin)
