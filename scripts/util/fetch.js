@@ -53,7 +53,13 @@ const fetch = async (_url, options = {}) => {
 		}
 
 		if (!(200 <= statusCode && statusCode < 300)) {
-			throw new Error(`bad status code ${statusCode}`)
+			let responseBody
+			try { responseBody = (await _consume(response)).toString() } catch (_) {}
+			try { responseBody = JSON.parse(responseBody) } catch (_) {}
+			throw Object.assign(new Error(`bad status code ${statusCode}`), {
+				statusCode,
+				responseBody,
+			})
 		}
 
 		return {

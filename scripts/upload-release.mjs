@@ -5,8 +5,9 @@ import { fetch } from './util/fetch.js'
 import Tar from 'tar'
 
 const commonHeaders = {
-	Accept: 'application/vnd.github+json',
-	Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+	"Accept": 'application/vnd.github+json',
+	"Authorization": `Bearer ${process.env.GITHUB_TOKEN}`,
+	'User-Agent': `@kmamal/build-sdl@${C.version}`,
 }
 
 let response
