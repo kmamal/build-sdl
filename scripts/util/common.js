@@ -24,8 +24,10 @@ const pkg = JSON.parse(Fs.readFileSync(pkgPath).toString())
 const version = pkg.version.slice(0, pkg.version.indexOf('-'))
 const [ , owner, repo ] = pkg.repository.url.match(/([^/:]+)\/([^/]+).git$/u)
 
+console.log({ 'process.env.CROSS_COMPILE_ARCH': process.env.CROSS_COMPILE_ARCH })
+
 const { platform, arch } = process
-const targetArch = process.env.CROSS_COMPILE_ARCH ?? arch
+const targetArch = process.env.CROSS_COMPILE_ARCH || arch
 const assetName = `SDL-v${version}-${platform}-${targetArch}.tar.gz`
 
 module.exports = {

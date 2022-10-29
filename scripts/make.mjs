@@ -44,18 +44,18 @@ process.chdir(C.dir.dist)
 	await recurse(C.dir.dist)
 }
 
-// Move the .dll to the /lib folder
-const move = async (src, dst) => {
-	await Fs.promises.copyFile(src, dst)
-	await Fs.promises.rm(src)
-}
+// // Move the .dll to the /lib folder
+// const move = async (src, dst) => {
+// 	await Fs.promises.copyFile(src, dst)
+// 	await Fs.promises.rm(src)
+// }
 
-if (C.platform === 'win32') {
-	move(
-		Path.join(C.dir.dist, 'bin/SDL.dll'),
-		Path.join(C.dir.dist, 'lib/SDL.dll'),
-	)
-}
+// if (C.platform === 'win32') {
+// 	move(
+// 		Path.join(C.dir.dist, 'bin/SDL.dll'),
+// 		Path.join(C.dir.dist, 'lib/SDL.dll'),
+// 	)
+// }
 
 // Move the headers to the root of /include
 {
