@@ -27,9 +27,9 @@ if (C.platform === 'darwin') {
 
 execSync(`cmake ${[
 	'-S',
-	`"${C.dir.posix.src}"`,
+	`'${C.dir.posix.src}'`,
 	'-B',
-	`"${C.dir.posix.build}"`,
+	`'${C.dir.posix.build}'`,
 	`-DCMAKE_INSTALL_PREFIX:PATH="${C.dir.posix.dist}"`,
 	'-DCMAKE_BUILD_TYPE=Release',
 	'-DSDL_TESTS=OFF',
