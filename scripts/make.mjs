@@ -1,4 +1,4 @@
-import Fs from 'node:fs'
+import Fs, { fstat } from 'node:fs'
 import Path from 'node:path'
 import { execSync } from 'node:child_process'
 import C from './util/common.js'
@@ -86,4 +86,11 @@ if (C.platform === 'win32') {
 		}
 	}
 	await recurse(C.dir.dist)
+}
+
+// Strip binaries on linux
+if (C.platform === 'linux') {
+	const libDir = Path.join(C.dir.dist, 'lib')
+	const libraries = await Fs.promises.readdir(libDir)
+	execSync(`strip -s ${Path.join(libDir, libraries[0])}`)
 }
