@@ -3,7 +3,7 @@ const Path = require('node:path')
 
 const dir = {}
 dir.root = Path.resolve(__dirname, '../..')
-dir.src = Path.join(dir.root, 'src')
+dir.sdl = Path.join(dir.root, 'sdl')
 dir.build = Path.join(dir.root, 'build')
 dir.dist = Path.join(dir.root, 'dist')
 dir.publish = Path.join(dir.root, 'publish')

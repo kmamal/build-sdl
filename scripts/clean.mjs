@@ -4,7 +4,7 @@ import C from './util/common.js'
 
 const dirs = [
 	Path.join(C.dir.root, 'node_modules'),
-	C.dir.src,
+	C.dir.sdl,
 	C.dir.build,
 	C.dir.dist,
 	C.dir.publish,

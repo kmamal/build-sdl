@@ -1,6 +1,6 @@
 .github
 .eslintrc.js
-src
+sdl
 build
 dist
 publish

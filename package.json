@@ -1,5 +1,5 @@
 {
-  "version": "2.24.1-5",
+  "version": "2.26.4-1",
   "name": "@kmamal/build-sdl",
   "description": "build-sdl",
   "repository": {
@@ -11,7 +11,7 @@
     "install": "cd scripts && node install.mjs",
     "download-release": "cd scripts && node download-release.mjs",
     "build": "cd scripts && node build.mjs",
-    "download-src": "cd scripts && node download-src.mjs",
+    "download-sdl": "cd scripts && node download-sdl.mjs",
     "configure": "cd scripts && node configure.mjs",
     "make": "cd scripts && node make.mjs",
     "upload-release": "cd scripts && node upload-release.mjs",

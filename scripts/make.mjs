@@ -1,4 +1,4 @@
-import Fs, { fstat } from 'node:fs'
+import Fs from 'node:fs'
 import Path from 'node:path'
 import { execSync } from 'node:child_process'
 import C from './util/common.js'
@@ -14,8 +14,6 @@ await Fs.promises.mkdir(C.dir.dist, { recursive: true })
 execSync(`cmake --install "${C.dir.build}" --config Release`, {
 	stdio: 'inherit',
 })
-
-process.chdir(C.dir.dist)
 
 // Delete files we won't need
 {

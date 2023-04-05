@@ -7,6 +7,8 @@ console.log("configure build in", C.dir.build)
 await Fs.promises.rm(C.dir.build, { recursive: true }).catch(() => {})
 await Fs.promises.mkdir(C.dir.build, { recursive: true })
 
+let CFLAGS
+let LDFLAGS
 let crossCompileFlag
 if (C.platform === 'darwin') {
 	crossCompileFlag = process.env.CROSS_COMPILE_ARCH
@@ -14,20 +16,20 @@ if (C.platform === 'darwin') {
 		: ''
 
 	if (C.targetArch === 'arm64') {
-		process.env.CFLAGS = '-mmacosx-version-min=11.0'
-		process.env.LDFLAGS = '-mmacosx-version-min=11.0'
+		CFLAGS = '-mmacosx-version-min=11.0'
+		LDFLAGS = '-mmacosx-version-min=11.0'
 	} else {
-		process.env.CFLAGS = [
+		CFLAGS = [
 			'-mmacosx-version-min=10.9',
 			'-DMAC_OS_X_VERSION_MIN_REQUIRED=1070',
 		].join(' ')
-		process.env.LDFLAGS = '-mmacosx-version-min=10.9'
+		LDFLAGS = '-mmacosx-version-min=10.9'
 	}
 }
 
 execSync(`cmake ${[
 	'-S',
-	`"${C.dir.src}"`,
+	`"${C.dir.sdl}"`,
 	'-B',
 	`"${C.dir.build}"`,
 	`-DCMAKE_INSTALL_PREFIX:PATH="${C.dir.dist}"`,
@@ -37,4 +39,9 @@ execSync(`cmake ${[
 	crossCompileFlag,
 ].filter(Boolean).join(' ')}`, {
 	stdio: 'inherit',
+	env: {
+		...process.env,
+		CFLAGS,
+		LDFLAGS,
+	},
 })

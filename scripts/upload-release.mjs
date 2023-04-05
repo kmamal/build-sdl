@@ -7,7 +7,7 @@ import Tar from 'tar'
 const commonHeaders = {
 	"Accept": 'application/vnd.github+json',
 	"Authorization": `Bearer ${process.env.GITHUB_TOKEN}`,
-	'User-Agent': `@kmamal/build-sdl@${C.version}`,
+	'User-Agent': `@${C.owner}/${C.repo}@${C.version}`,
 }
 
 let response

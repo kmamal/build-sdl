@@ -2,7 +2,7 @@ import Fs from 'node:fs'
 import C from './util/common.js'
 
 await Promise.all([
-	C.dir.src,
+	C.dir.sdl,
 	C.dir.build,
 	C.dir.dist,
 	C.dir.publish,
@@ -10,6 +10,6 @@ await Promise.all([
 	await Fs.promises.rm(dir, { recursive: true }).catch(() => {})
 }))
 
-await import('./download-src.mjs')
+await import('./download-sdl.mjs')
 await import('./configure.mjs')
 await import('./make.mjs')
