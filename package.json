@@ -16,9 +16,7 @@
     "make": "cd scripts && node make.mjs",
     "upload-release": "cd scripts && node upload-release.mjs",
     "release": "cd scripts && node release.mjs",
-    "clean": "cd scripts && node clean.mjs",
-    "install-deps-ubuntu": "./scripts/install-deps-ubuntu.sh",
-    "install-deps-mac": "./scripts/install-deps-mac.sh"
+    "clean": "cd scripts && node clean.mjs"
   },
   "license": "MIT",
   "dependencies": {

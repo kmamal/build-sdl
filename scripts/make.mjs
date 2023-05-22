@@ -4,7 +4,8 @@ import { execSync } from 'node:child_process'
 import C from './util/common.js'
 
 console.log("build in", C.dir.build)
-execSync(`cmake --build "${C.dir.build}" --config Release --parallel`, {
+const parallelFlag = process.env.BUILD_SDL_PARALLEL ? '--parallel' : ''
+execSync(`cmake --build "${C.dir.build}" --config Release ${parallelFlag}`, {
 	stdio: 'inherit',
 })
 
