@@ -4,7 +4,7 @@
   "description": "build-sdl",
   "repository": {
     "type": "git",
-    "url": "git@github.com:kmamal/build-sdl.git"
+    "url": "git+ssh://git@github.com:kmamal/build-sdl.git"
   },
   "main": "index.js",
   "scripts": {
@@ -20,6 +20,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "tar": "^6.1.11"
+    "tar": "^7.1.0"
   }
 }

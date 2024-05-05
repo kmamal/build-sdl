@@ -98,3 +98,6 @@ expect -f - <<- EOF
 
 	expect eof
 EOF
+
+# debug
+# sudo mount -o loop,offset=272629760 "$IMAGE" "$MOUNT"

@@ -36,6 +36,8 @@ getRelease: {
 			body: JSON.stringify({
 				tag_name: `v${C.version}`, // eslint-disable-line camelcase
 				name: `v${C.version}`,
+				prerelease: C.isPrerelease,
+				make_latest: `${!C.isPrerelease}`, // eslint-disable-line camelcase
 			}),
 		},
 	)

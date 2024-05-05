@@ -1,6 +1,11 @@
-.github
-.eslintrc.js
-sdl
-build
-dist
-publish
+/.github/
+/sdl/
+/build/
+/dist/
+/publish/
+/scripts/install-deps-mac.sh
+/scripts/install-deps-raspbian.sh
+/scripts/install-deps-ubuntu.sh
+/scripts/release-rpi-qemu.sh
+/scripts/release.mjs
+/scripts/upload-release.mjs

@@ -1,5 +1,5 @@
-const Fs = require('node:fs')
-const Path = require('node:path')
+const Fs = require('fs')
+const Path = require('path')
 
 const dir = {}
 dir.root = Path.resolve(__dirname, '../..')
@@ -20,6 +20,7 @@ const assetName = `SDL-v${version}-${platform}-${targetArch}.tar.gz`
 module.exports = {
 	dir,
 	version,
+	isPrerelease: false, // TODO
 	owner,
 	repo,
 	platform,

@@ -2,6 +2,9 @@ name: Build and upload
 
 on: workflow_dispatch
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: ${{ matrix.platform.name }}
@@ -19,7 +22,7 @@ jobs:
     runs-on: ${{ matrix.platform.os }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - if: ${{ startsWith(matrix.platform.os, 'ubuntu-') && matrix.platform.arch != 'arm64' }}
         run: sudo apt-get update && ./scripts/install-deps-ubuntu.sh
