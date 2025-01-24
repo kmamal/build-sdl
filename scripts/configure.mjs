@@ -11,9 +11,10 @@ let CFLAGS
 let LDFLAGS
 let crossCompileFlag
 if (C.platform === 'darwin') {
-	crossCompileFlag = process.env.CROSS_COMPILE_ARCH
-		? `-DCMAKE_OSX_ARCHITECTURES="${process.env.CROSS_COMPILE_ARCH}"`
-		: ''
+	let arch = process.env.CROSS_COMPILE_ARCH ?? C.arch
+	if (arch === 'x64') { arch = 'x86_64' }
+
+	crossCompileFlag = `-DCMAKE_OSX_ARCHITECTURES="${arch}"`
 
 	if (C.targetArch === 'arm64') {
 		CFLAGS = '-mmacosx-version-min=11.0'
