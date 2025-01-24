@@ -14,52 +14,62 @@ mkdir -p "$DIR"
 cd "$DIR"
 echo "Working in $DIR"
 
-sudo apt install xz-utils qemu-system-arm expect -y
 
-wget "https://downloads.raspberrypi.org/$OS/images/$OS-$DATE/$IMAGE.xz"
+sudo apt-get update
+sudo apt-get install -y xz-utils qemu-system-arm expect
+
+CACHED="/home/$USER/Desktop/$IMAGE.xz"
+if test -f "$CACHED"; then
+	cp "$CACHED" .
+else
+	wget --progress=dot:giga "https://downloads.raspberrypi.org/$OS/images/$OS-$DATE/$IMAGE.xz"
+fi
 unxz "$IMAGE.xz"
 
 qemu-img resize "$IMAGE" 4G
 
 expect -f - <<- EOF
 	set timeout -1
-	spawn fdisk "$IMAGE"
 
-	expect "Command (m for help): "
-	send "d\n"
+	spawn fdisk {$IMAGE}
 
-	expect "Partition number (1,2, default 2): "
-	send "\n"
+	expect -exact {Command (m for help): }
+	send -- [string cat {d} "\r"]
 
-	expect "Command (m for help): "
-	send "n\n"
+	expect -exact {Partition number (1,2, default 2): }
+	send -- [string cat {} "\r"]
 
-	expect "Select (default p): "
-	send "\n"
+	expect -exact {Command (m for help): }
+	send -- [string cat {n} "\r"]
 
-	expect "Partition number (2-4, default 2): "
-	send "\n"
+	expect -exact {Select (default p): }
+	send -- [string cat {} "\r"]
 
-	expect "First sector (2048-8388607, default 2048): "
-	send "532480\n"
+	expect -exact {Partition number (2-4, default 2): }
+	send -- [string cat {} "\r"]
 
-	expect "Last sector, +/-sectors or +/-size{K,M,G,T,P} (532480-8388607, default 8388607): "
-	send "\n"
+	expect -exact {First sector (2048-8388607, default 2048): }
+	send -- [string cat {532480} "\r"]
 
-	expect "Do you want to remove the signature*"
-	send "N\n"
+	expect -exact {(532480-8388607, default 8388607): }
+	send -- [string cat {} "\r"]
 
-	expect "Command (m for help): "
-	send "w\n"
+	expect -exact {Do you want to remove the signature?}
+	send -- [string cat {N} "\r"]
+
+	expect -exact {Command (m for help): }
+	send -- [string cat {w} "\r"]
 
 	expect eof
 EOF
 
-sudo losetup -P /dev/loop0 "$IMAGE"
-sudo e2fsck -fa /dev/loop0p2 || true
-sudo resize2fs /dev/loop0p2
-sudo losetup -d /dev/loop0
+LOOP="$(sudo losetup -f)"
+sudo losetup -P "$LOOP" "$IMAGE"
+sudo e2fsck -fa "${LOOP}p2" || true
+sudo resize2fs "${LOOP}p2"
+sudo losetup -d "${LOOP}"
 
+sudo mkdir -p "$MOUNT"
 sudo mount -o loop,offset=4194304 "$IMAGE" "$MOUNT"
 
 printf 'pi:$6$c70VpvPsVNCG0YR5$l5vWWLsLko9Kj65gcQ8qvMkuOoRkEagI90qi3F/Y7rm8eNYZHW8CY6BOIKwMH7a3YYzZYL90zf304cAHLFaZE0' | sudo tee "$MOUNT/userconf" > /dev/null
@@ -84,17 +94,17 @@ expect -f - <<- EOF
 	expect "Password: "
 	send "raspberry\n"
 
-	expect "pi@raspberrypi*"
-	send "curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt-get install -y nodejs\n"
+	expect -exact {pi@raspberrypi}
+	send -- [string cat {curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt-get install -y nodejs} "\r"]
 
-	expect "pi@raspberrypi*"
-	send "wget https://github.com/kmamal/build-sdl/archive/refs/heads/master.tar.gz && tar xvf master.tar.gz && cd build-sdl-master\n"
+	expect -exact {pi@raspberrypi}
+	send -- [string cat {wget --progress=dot https://github.com/kmamal/build-sdl/archive/refs/heads/master.tar.gz && tar xvf master.tar.gz && cd build-sdl-master} "\r"]
 
-	expect "pi@raspberrypi*"
-	send "./scripts/install-deps-raspbian.sh && GITHUB_TOKEN="$GITHUB_TOKEN" npm run release\n"
+	expect -exact {pi@raspberrypi}
+	send -- [string cat {./scripts/install-deps-raspbian.sh && GITHUB_TOKEN="$GITHUB_TOKEN" NO_PARALLEL=1 npm run release} "\r"]
 
-	expect "pi@raspberrypi*"
- 	send "sudo shutdown -h now\n"
+	expect -exact {pi@raspberrypi}
+	send -- [string cat {sudo shutdown -h now} "\r"]
 
 	expect eof
 EOF
