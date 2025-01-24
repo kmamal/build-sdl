@@ -1,12 +1,11 @@
 {
-  "version": "2.26.4-2",
+  "version": "2.30.11-1",
   "name": "@kmamal/build-sdl",
   "description": "build-sdl",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com:kmamal/build-sdl.git"
   },
-  "main": "index.js",
   "scripts": {
     "install": "cd scripts && node install.mjs",
     "download-release": "cd scripts && node download-release.mjs",
@@ -20,6 +19,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "tar": "^7.1.0"
+    "tar": "^7.4.3"
   }
 }
