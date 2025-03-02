@@ -1,5 +1,5 @@
 
-sudo apt-get install -y \
+apt-get install -y \
 	build-essential \
 	cmake \
 	libasound2-dev \
