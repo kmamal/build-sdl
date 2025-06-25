@@ -108,7 +108,7 @@ expect -f - <<- EOF
 	send -- [string cat {curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - && sudo apt-get install -y nodejs} "\r"]
 
 	expect -exact {pi@raspberrypi}
-	send -- [string cat {wget --progress=dot https://github.com/kmamal/build-sdl/archive/refs/heads/master.tar.gz && tar xvf master.tar.gz && cd build-sdl-master} "\r"]
+	send -- [string cat {wget --progress=dot https://github.com/bmsuseluda/build-sdl/archive/refs/heads/master.tar.gz && tar xvf master.tar.gz && cd build-sdl-master} "\r"]
 
 	expect -exact {pi@raspberrypi}
 	send -- [string cat {sudo ./scripts/install-deps-raspbian.sh && GITHUB_TOKEN="$GITHUB_TOKEN" NO_PARALLEL=1 npm run release} "\r"]
