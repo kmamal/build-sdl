@@ -1,10 +1,10 @@
 {
   "version": "2.32.8-0",
-  "name": "@bmsuseluda/build-sdl",
+  "name": "@kmamal/build-sdl",
   "description": "build-sdl",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com:bmsuseluda/build-sdl.git"
+    "url": "git+ssh://git@github.com:kmamal/build-sdl.git"
   },
   "scripts": {
     "install": "cd scripts && node install.mjs",
