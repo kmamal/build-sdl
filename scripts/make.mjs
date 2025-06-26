@@ -45,7 +45,7 @@ execSync(`cmake --install "${C.dir.build}" --config Release`, {
 
 // Move the .dll to the /lib folder
 const move = async (src, dst) => {
-	await Fs.promises.cp(src, dst)
+	await Fs.promises.cp(src, dst, { verbatimSymlinks: true })
 	await Fs.promises.rm(src)
 }
 
