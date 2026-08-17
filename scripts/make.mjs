@@ -93,3 +93,9 @@ if (C.platform === 'linux') {
 	const libraries = await Fs.promises.readdir(libDir)
 	execSync(`strip -s ${Path.join(libDir, libraries[0])}`)
 }
+
+// Include SDL's license
+await Fs.promises.cp(
+	Path.join(C.dir.sdl, 'LICENSE.txt'),
+	Path.join(C.dir.dist, 'LICENSE.txt'),
+)
