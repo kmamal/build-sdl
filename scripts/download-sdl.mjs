@@ -14,5 +14,5 @@ await Fs.promises.rm(C.dir.sdl, { recursive: true }).catch(() => {})
 await Fs.promises.mkdir(C.dir.sdl, { recursive: true })
 await Stream.promises.pipeline(
 	Stream.Readable.fromWeb(response.body),
-	Tar.extract({ gzip: true, strip: 1, C: C.dir.sdl }),
+	Tar.extract({ preservePaths: true, gzip: true, strip: 1, C: C.dir.sdl }),
 )
