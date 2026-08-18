@@ -10,7 +10,9 @@ dir.publish = Path.join(dir.root, 'publish')
 
 const pkgPath = Path.join(dir.root, 'package.json')
 const pkg = JSON.parse(Fs.readFileSync(pkgPath).toString())
-const version = pkg.version.slice(0, pkg.version.indexOf('-'))
+// The package version is the upstream version plus a "-N" packaging suffix
+const hyphenIndex = pkg.version.indexOf('-')
+const version = hyphenIndex === -1 ? pkg.version : pkg.version.slice(0, hyphenIndex)
 const [ , owner, repo ] = pkg.repository.url.match(/([^/:]+)\/([^/]+).git$/u)
 
 const { platform, arch } = process
@@ -20,7 +22,7 @@ const assetName = `SDL-v${version}-${platform}-${targetArch}.tar.gz`
 module.exports = {
 	dir,
 	version,
-	isPrerelease: false, // TODO
+	isPrerelease: false,
 	owner,
 	repo,
 	platform,

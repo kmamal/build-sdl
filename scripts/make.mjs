@@ -50,7 +50,7 @@ const move = async (src, dst) => {
 }
 
 if (C.platform === 'win32') {
-	move(
+	await move(
 		Path.join(C.dir.dist, 'bin/SDL2.dll'),
 		Path.join(C.dir.dist, 'lib/SDL2.dll'),
 	)
