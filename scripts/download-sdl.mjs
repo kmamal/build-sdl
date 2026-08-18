@@ -1,7 +1,8 @@
 import Fs from 'node:fs'
+import Zlib from 'node:zlib'
 import Stream from 'node:stream'
 import C from './util/common.js'
-import * as Tar from 'tar'
+import { unpackTar } from 'modern-tar/fs'
 
 const url = `https://github.com/libsdl-org/SDL/archive/refs/tags/release-${C.version}.tar.gz`
 
@@ -14,5 +15,6 @@ await Fs.promises.rm(C.dir.sdl, { recursive: true }).catch(() => {})
 await Fs.promises.mkdir(C.dir.sdl, { recursive: true })
 await Stream.promises.pipeline(
 	Stream.Readable.fromWeb(response.body),
-	Tar.extract({ preservePaths: true, gzip: true, strip: 1, C: C.dir.sdl }),
+	Zlib.createGunzip(),
+	unpackTar(C.dir.sdl, { strip: 1 }),
 )
