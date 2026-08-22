@@ -13,7 +13,7 @@ const pkg = JSON.parse(Fs.readFileSync(pkgPath).toString())
 // The package version is the upstream version plus a "-N" packaging suffix
 const hyphenIndex = pkg.version.indexOf('-')
 const version = hyphenIndex === -1 ? pkg.version : pkg.version.slice(0, hyphenIndex)
-const [ , owner, repo ] = pkg.repository.url.match(/([^/:]+)\/([^/]+).git$/u)
+const [ , owner, repo ] = pkg.repository.url.match(/([^/:]+)\/([^/]+)\.git$/u)
 
 const { platform, arch } = process
 const targetArch = process.env.CROSS_COMPILE_ARCH || arch
