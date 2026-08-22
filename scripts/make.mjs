@@ -21,7 +21,7 @@ execSync(`cmake --install "${C.dir.build}" --config Release`, {
 	const platformFilter = {
 		linux: (name) => name.includes('.so'),
 		darwin: (name) => name.endsWith('.dylib'),
-		win32: (name) => name === 'SDL2.dll' || name === 'SDL2.lib',
+		win32: (name) => name === 'SDL3.dll' || name === 'SDL3.lib',
 	}[C.platform]
 
 	const recurse = async (dirPath) => {
@@ -51,22 +51,9 @@ const move = async (src, dst) => {
 
 if (C.platform === 'win32') {
 	await move(
-		Path.join(C.dir.dist, 'bin/SDL2.dll'),
-		Path.join(C.dir.dist, 'lib/SDL2.dll'),
+		Path.join(C.dir.dist, 'bin/SDL3.dll'),
+		Path.join(C.dir.dist, 'lib/SDL3.dll'),
 	)
-}
-
-// Move the headers to the root of /include
-{
-	const shallowDir = Path.join(C.dir.dist, 'include')
-	const deepDir = Path.join(shallowDir, 'SDL2')
-	const headers = await Fs.promises.readdir(deepDir)
-	await Promise.all(headers.map(async (name) => {
-		await move(
-			Path.join(deepDir, name),
-			Path.join(shallowDir, name),
-		)
-	}))
 }
 
 // Delete all empty dirs

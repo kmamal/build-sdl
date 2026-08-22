@@ -15,6 +15,7 @@ apt-get install -y \
 	libxfixes-dev \
 	libxi-dev \
 	libxss-dev \
+	libxtst-dev \
 	libwayland-dev \
 	libxkbcommon-dev \
 	libdrm-dev \
