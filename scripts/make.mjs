@@ -91,7 +91,7 @@ if (C.platform === 'win32') {
 if (C.platform === 'linux') {
 	const libDir = Path.join(C.dir.dist, 'lib')
 	const libraries = await Fs.promises.readdir(libDir)
-	execSync(`strip -s ${Path.join(libDir, libraries[0])}`)
+	execSync(`strip -s "${Path.join(libDir, libraries[0])}"`)
 }
 
 // Include SDL's license
