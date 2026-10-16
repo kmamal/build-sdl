@@ -34,5 +34,4 @@ jobs:
       - env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROSS_COMPILE_ARCH: ${{ matrix.platform.arch }}
-          BUILD_SDL_PARALLEL: 1
         run: npm run release
