@@ -11,6 +11,7 @@
     "download-release": "cd scripts && node download-release.mjs",
     "build": "cd scripts && node build.mjs",
     "download-sdl": "cd scripts && node download-sdl.mjs",
+    "patch-sdl": "cd scripts && node patch-sdl.mjs",
     "configure": "cd scripts && node configure.mjs",
     "make": "cd scripts && node make.mjs",
     "upload-release": "cd scripts && node upload-release.mjs",
