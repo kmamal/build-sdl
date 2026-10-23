@@ -10,7 +10,7 @@ await Fs.promises.mkdir(C.dir.build, { recursive: true })
 let CFLAGS
 let LDFLAGS
 let crossCompileFlag
-let libcFlag
+let msvcRuntimeFlag
 if (C.platform === 'darwin') {
 	let arch = process.env.CROSS_COMPILE_ARCH ?? C.arch
 	if (arch === 'x64') { arch = 'x86_64' }
@@ -27,7 +27,7 @@ if (C.platform === 'darwin') {
 	}
 }
 else if (C.platform === 'win32') {
-	libcFlag = '-DSDL_LIBC=OFF'
+	msvcRuntimeFlag = '-DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreaded'
 }
 
 execSync(`cmake ${[
@@ -40,7 +40,7 @@ execSync(`cmake ${[
 	'-DSDL_TESTS=OFF',
 	'-DSDL_INSTALL_TESTS=OFF',
 	crossCompileFlag,
-	libcFlag,
+	msvcRuntimeFlag,
 ].filter(Boolean).join(' ')}`, {
 	stdio: 'inherit',
 	env: {
