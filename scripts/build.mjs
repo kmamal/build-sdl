@@ -11,6 +11,5 @@ await Promise.all([
 }))
 
 await import('./download-sdl.mjs')
-await import('./patch-sdl.mjs')
 await import('./configure.mjs')
 await import('./make.mjs')
