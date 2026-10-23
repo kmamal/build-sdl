@@ -10,6 +10,7 @@ await Fs.promises.mkdir(C.dir.build, { recursive: true })
 let CFLAGS
 let LDFLAGS
 let crossCompileFlag
+let libcFlag
 if (C.platform === 'darwin') {
 	let arch = process.env.CROSS_COMPILE_ARCH ?? C.arch
 	if (arch === 'x64') { arch = 'x86_64' }
@@ -25,6 +26,9 @@ if (C.platform === 'darwin') {
 		LDFLAGS = '-mmacosx-version-min=10.9'
 	}
 }
+else if (C.platform === 'win32') {
+	libcFlag = '-DSDL_LIBC=OFF'
+}
 
 execSync(`cmake ${[
 	'-S',
@@ -36,6 +40,7 @@ execSync(`cmake ${[
 	'-DSDL_TESTS=OFF',
 	'-DSDL_INSTALL_TESTS=OFF',
 	crossCompileFlag,
+	libcFlag,
 ].filter(Boolean).join(' ')}`, {
 	stdio: 'inherit',
 	env: {
