@@ -1,11 +1,11 @@
 import Fs from 'node:fs'
+import Os from 'node:os'
 import Path from 'node:path'
 import { execSync } from 'node:child_process'
 import C from './util/common.js'
 
 console.log("build in", C.dir.build)
-const parallelFlag = process.env.BUILD_SDL_PARALLEL ? '--parallel' : ''
-execSync(`cmake --build "${C.dir.build}" --config Release ${parallelFlag}`, {
+execSync(`cmake --build "${C.dir.build}" --config Release --parallel ${Os.availableParallelism()}`, {
 	stdio: 'inherit',
 })
 
